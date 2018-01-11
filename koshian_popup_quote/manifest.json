@@ -1,0 +1,34 @@
+{
+    "manifest_version":2,
+
+    "name":"KOSHIAN 引用をポップアップで表示 改",
+
+    "version":"1.0.0",
+
+    "description":"引用元ををポップアップで表示します",
+
+    "icons":{
+        "48":"icons/icon-48.png"
+    },
+
+    "content_scripts":[
+        {
+            "matches":["*://*.2chan.net/*/res/*"],
+            "js":["res.js"]
+        }
+    ],
+    
+    "options_ui":{
+        "page":"options.html"
+    },
+
+    "permissions":[
+        "storage"
+    ],
+    
+    "applications":{
+        "gecko":{
+            "id":"{54BE1208-F6AC-11E7-BCFC-0C64237CB63F}"
+        }
+    }
+}

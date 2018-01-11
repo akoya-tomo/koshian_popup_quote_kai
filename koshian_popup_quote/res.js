@@ -3,6 +3,7 @@ const DEFAULT_SEARCH_FILE = true;
 const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
+const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
@@ -11,11 +12,13 @@ let search_file = DEFAULT_SEARCH_FILE;
 let popup_time = DEFAULT_POPUP_TIME;
 let popup_indent = DEFAULT_POPUP_INDENT;
 let popup_todown = DEFAULT_POPUP_TODOWN;
+let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let g_thre = null;
 let g_line_list = [];
 let g_response_list = [];
 let g_quote_index_list;
 let g_last_response_num = 0;
+let selected_elm,slected_text_node;
 
 const SEARCH_RESULT_PERFECT = 0;
 const SEARCH_RESULT_MAYBE = 1;
@@ -137,6 +140,7 @@ class Quote {
         this.initialized = false;
         this.mouseon = false;
         this.timer = false;
+        this.zIndex = 1;
 
         let quote = this;
 
@@ -163,7 +167,12 @@ class Quote {
     }
 
     findOriginIndex() {
-        let search_text = this.green_text.innerText.slice(1);
+        let search_text = this.green_text.innerText;
+        if (search_text.charAt(0) == ">") {
+            search_text = search_text.slice(1);
+        } else {
+            this.zIndex = 2;
+        }
         let origin_kouho = [];
 
         for (let i = this.index - 1; i >= 0; --i) {
@@ -209,7 +218,12 @@ class Quote {
         this.popup.style.color = TEXT_COLOR;
         this.popup.style.backgroundColor = BG_COLOR;
         this.popup.style.border = "solid 1px";
-        this.popup.style.zIndex = 1;
+        if (this.depth > 0) {
+            if (this.zIndex < this.parent.zIndex) {
+                this.zIndex = this.parent.zIndex;
+            }
+        }
+        this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
         this.green_text.appendChild(this.popup);
@@ -230,7 +244,12 @@ class Quote {
         this.popup.style.color = TEXT_COLOR;
         this.popup.style.backgroundColor = BG_COLOR;
         this.popup.style.border = "solid 1px";
-        this.popup.style.zIndex = 1;
+        if (this.depth > 0) {
+            if (this.zIndex < this.parent.zIndex) {
+                this.zIndex = this.parent.zIndex;
+            }
+        }
+        this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
         this.green_text.appendChild(this.popup);
@@ -286,6 +305,13 @@ class Quote {
 
                 this.popup.style.left = `${rc.left + popup_indent}px`;
                 this.popup.style.display = "block";
+            }
+            if (selected_elm && this.depth == 0) {
+                let sel_range = window.getSelection().getRangeAt(0);
+                let selected_koshian_res = document.getElementById("selected").firstElementChild;
+                if (selected_koshian_res) {
+                    sel_range.setEndBefore(selected_koshian_res);
+                }
             }
         }
     }
@@ -370,6 +396,49 @@ function main() {
         process(prev_res_num, cur_res_num);
         g_last_response_num = cur_res_num;
     });
+    document.addEventListener("mouseup", onMouseUp);
+
+}
+
+function onMouseUp(e) {
+    if (e.button != 0 || e.target.closest(".KOSHIAN_response")) return;
+    if (selected_elm) {
+        selected_elm.parentNode.replaceChild(selected_text_node, selected_elm);
+        selected_elm = null;
+        selected_text_node = null;
+    }
+    if (!search_selected_length) return;
+    let sel = window.getSelection();
+    let sel_str = sel.toString();
+    if (!sel_str) return;
+    if (sel_str.length < search_selected_length || sel_str.match(/[\r\n]/)) return;
+    let sel_parent_elm = sel.anchorNode.parentElement;
+    if (!sel_parent_elm.closest("blockquote")) return;
+
+    let font_elm = document.createElement("font");
+    font_elm.id = "selected";
+    try {
+        let sel_range = sel.getRangeAt(0);
+        sel_range.surroundContents(font_elm);
+        selected_elm = document.getElementById("selected");
+        selected_text_node = document.createTextNode(selected_elm.innerText);
+        let selected_index = 0;
+        for (let node = selected_elm.parentNode; node; node = node.parentNode) {
+            if (node.className == "rtd") {
+                let selected_reply_no = node.firstChild;
+                if (selected_reply_no.className == "KOSHIAN_reply_no") {
+                    selected_index = Number(selected_reply_no.innerText);
+                }
+                break;
+            }
+        }
+        if (selected_index) {
+            new Quote(selected_elm, selected_index, 0, null);
+        }
+    } catch(e) {
+//      console.log("res.js: surround contents error");
+    }
+
 }
 
 function safeGetValue(value, default_value) {
@@ -386,6 +455,7 @@ function onLoadSetting(result) {
     popup_time = Number(safeGetValue(result.popup_time, DEFAULT_POPUP_TIME));
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
+    search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
 
     main();
 }
@@ -400,6 +470,7 @@ function onSettingChanged(changes, areaName) {
     popup_time = Number(safeGetValue(changes.popup_time.newValue, DEFAULT_POPUP_TIME));
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
+    search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

@@ -27,7 +27,7 @@
 ## 注意事項  
 * このアドオンはWebExtensionアドオン対応のFirefox専用です。  
 * [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/)のv1.2以前と組み合わせては使えません。  
-  [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.2以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
+  [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
 * 文字列選択で引用ポップアップするのはレス内の本文のみです。  
   題名・なまえ・ID・IPやファイル名を文字列選択してもポップアップしません。  
 * 複数行に跨る文字列選択ではポップアップしません。  

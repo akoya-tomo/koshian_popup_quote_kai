@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8">
+</head>
+
+<body>
+
+  <form>
+    <p>
+      <input id="search_resno" type="checkbox">
+      <label for="search_resno">レス番号の引用を探す</label>
+      <br>
+      <input id="search_file" type="checkbox">
+      <label for="search_file">添付ファイル名の引用を探す</label>
+    </p>
+
+    <p>
+      <input id="popup_time" type="number" min="0">
+      <label for="popup_time">ミリ秒後にポップアップ</label>
+    </p>
+
+    <p>
+      <input id="popup_indent" type="number">
+      <label for="popup_indent">ポップアップのインデント</label>
+    </p>
+
+    <p>
+      <input id="popup_todown" type="checkbox">
+      <label for="popup_todown">ポップアップを下に伸ばす</label>
+    </p>
+
+    <p>
+      <button id="save_button" type="button">Save</button>
+    </p>
+  </form>
+
+  <script src="options.js"></script>
+
+</body>
+
+</html>

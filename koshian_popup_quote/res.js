@@ -56,11 +56,21 @@ class SearchTarget {
     }
 
     searchResNo(no){
-        return this.resno == no;
+        // 検索文字列が数字の時はレスNo.の数字部分と比較
+        if (no.match(/^\d+$/)) {
+            return this.resno.slice(3) == no;
+        } else {
+            return this.resno == no;
+        }
     }
 
     searchFileName(name){
-        return this.filename == name;
+        // 検索文字列が数字の時はファイル名の数字部分と比較
+        if (name.match(/^\d+$/)) {
+            return this.filename.match(/^\d+/)[0] == name;
+        } else {
+            return this.filename == name;
+        }
     }
 
     static createByThre(thre) {

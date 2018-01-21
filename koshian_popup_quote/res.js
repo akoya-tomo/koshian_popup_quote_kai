@@ -18,7 +18,10 @@ let g_line_list = [];
 let g_response_list = [];
 let g_quote_index_list;
 let g_last_response_num = 0;
-let selected_elm,slected_text_node;
+let selected_elm;
+let selected_depth = 0;
+let selected_parent_list = [null];
+let quote_mouse_down = false;
 
 const SEARCH_RESULT_PERFECT = 0;
 const SEARCH_RESULT_MAYBE = 1;
@@ -53,11 +56,21 @@ class SearchTarget {
     }
 
     searchResNo(no){
-        return this.resno == no;
+        // 検索文字列が数字の時はレスNo.の数字部分と比較
+        if (no.match(/^\d+$/)) {
+            return this.resno.slice(3) == no;
+        } else {
+            return this.resno == no;
+        }
     }
 
     searchFileName(name){
-        return this.filename == name;
+        // 検索文字列が数字の時はファイル名の数字部分と比較
+        if (name.match(/^\d+$/)) {
+            return this.filename.match(/^\d+/)[0] == name;
+        } else {
+            return this.filename == name;
+        }
     }
 
     static createByThre(thre) {
@@ -130,7 +143,7 @@ class SearchTarget {
 let search_targets = [];
 
 class Quote {
-    constructor(green_text, index, depth = 0, parent = null) {
+    constructor(green_text, index, depth = 0, parent = null, select = false) {
         this.green_text = green_text;
         this.index = index;
         this.origin_index = -1;
@@ -140,7 +153,12 @@ class Quote {
         this.initialized = false;
         this.mouseon = false;
         this.timer = false;
-        this.zIndex = 1;
+        this.select = select;
+        if (this.parent) {
+            this.zIndex = this.parent.zIndex;
+        } else {
+            this.zIndex = 1;
+        }
 
         let quote = this;
 
@@ -158,20 +176,43 @@ class Quote {
 
                 quote.timer = true;
             }
+
+            if (e.buttons == 1) {
+                // 文字列選択ドラッグ中に引用にマウスオーバーしたらポップアップ抑制（文字列選択ポップアップ作成優先）
+                quote.mouseon = false;
+                quote_mouse_down = true;
+            } else {
+                quote_mouse_down = false;
+            }
         });
 
         this.green_text.addEventListener("mouseleave", (e) => {
             quote.mouseon = false;
             quote.hide(e);
+            quote_mouse_down = false;
+        });
+
+        this.green_text.addEventListener("mousedown", (e) => {
+            if (e.button == 0 &&
+                e.target.nodeName == "FONT" &&
+                !quote.select &&
+                quote.depth == selected_depth - 1 &&
+                !quote_mouse_down) {
+                // 引用の上で左ボタン押下したらポップアップ抑制（文字列選択ポップアップ作成優先）
+                quote.mouseon = false;
+                quote.hide(e);
+                quote_mouse_down = true;
+            }
         });
     }
 
     findOriginIndex() {
         let search_text = this.green_text.innerText;
-        if (search_text.charAt(0) == ">") {
-            search_text = search_text.slice(1);
+        if (this.select) {
+            // 文字列選択ポップアップを前面にする
+            this.zIndex = this.zIndex + 1;
         } else {
-            this.zIndex = 2;
+            search_text = search_text.slice(1);
         }
         let origin_kouho = [];
 
@@ -218,14 +259,11 @@ class Quote {
         this.popup.style.color = TEXT_COLOR;
         this.popup.style.backgroundColor = BG_COLOR;
         this.popup.style.border = "solid 1px";
-        if (this.depth > 0) {
-            if (this.zIndex < this.parent.zIndex) {
-                this.zIndex = this.parent.zIndex;
-            }
-        }
         this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
+        // ポップアップの最小幅を追加（ポップアップサイズの維持）
+        this.popup.style.minWidth = "480px";
         this.green_text.appendChild(this.popup);
     }
 
@@ -244,14 +282,11 @@ class Quote {
         this.popup.style.color = TEXT_COLOR;
         this.popup.style.backgroundColor = BG_COLOR;
         this.popup.style.border = "solid 1px";
-        if (this.depth > 0) {
-            if (this.zIndex < this.parent.zIndex) {
-                this.zIndex = this.parent.zIndex;
-            }
-        }
         this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
+        // ポップアップの最小幅を追加（ポップアップサイズの維持）
+        this.popup.style.minWidth = "480px";
         this.green_text.appendChild(this.popup);
 
         let font_elem_list = this.popup.getElementsByTagName("blockquote")[0].getElementsByTagName("font");
@@ -284,6 +319,11 @@ class Quote {
                 let green_text_rect = e.target.getBoundingClientRect();
                 let relative_top = green_text_rect.top - parent_popup_rect.top;
                 let relative_left = green_text_rect.left - parent_popup_rect.left;
+                if (this.select) {
+                    // 文字列選択ポップアップはレス本文をポップアップleft位置基準にする
+                    let green_text_parent_rect = e.target.parentElement.getBoundingClientRect();
+                    relative_left = green_text_parent_rect.left - parent_popup_rect.left;
+                }
 
                 if (popup_todown) {
                     this.popup.style.top = `${relative_top + green_text_rect.height - 2}px`;
@@ -304,21 +344,35 @@ class Quote {
                 }
 
                 this.popup.style.left = `${rc.left + popup_indent}px`;
+                if (this.select) {
+                    // 文字列選択ポップアップはレス本文をポップアップleft位置基準にする
+                    let rc_parent = Quote.getPopupPosition(e.clientX, e.clientY, this.green_text.parentElement);
+                    this.popup.style.left = `${rc_parent.left + popup_indent}px`;
+                }
                 this.popup.style.display = "block";
             }
-            if (selected_elm && this.depth == 0) {
-                let sel_range = window.getSelection().getRangeAt(0);
-                let selected_koshian_res = document.getElementById("selected").firstElementChild;
-                if (selected_koshian_res) {
-                    sel_range.setEndBefore(selected_koshian_res);
+            if (selected_elm) {
+                let sel = window.getSelection();
+                if (sel.toString().length) {
+                    // 文字列選択終点をポップアップ要素の前に移動
+                    let sel_range = sel.getRangeAt(0);
+                    let selected_koshian_res = selected_elm.firstElementChild;
+                    if (selected_koshian_res) {
+                        sel_range.setEndBefore(selected_koshian_res);
+                    }
                 }
             }
+            selected_depth = this.depth + 1;
+            //console.log("res.js: selected_depth = " + selected_depth);
+            selected_parent_list[selected_depth] = this;
         }
     }
 
     hide(e) {
         if (this.popup) {
             this.popup.style.display = "none";
+            selected_depth = this.depth;
+            //console.log("res.js: selected_depth = " + selected_depth);
         }
     }
 
@@ -396,49 +450,137 @@ function main() {
         process(prev_res_num, cur_res_num);
         g_last_response_num = cur_res_num;
     });
+    document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
 
 }
 
+function onMouseDown(e) {
+    if (e.button != 0 || !search_selected_length) return;
+    // 左ボタン押下場所が選択文字列のfont要素ならテキスト置換中止
+    if (e.target.className == "KOSHIAN_selected_font") return;
+
+    // 選択文字列のfont要素をテキストノードに戻す
+    let koshian_response = e.target.closest(".KOSHIAN_response");
+    replaceText(koshian_response, "KOSHIAN_selected_font");
+    selected_elm = null;
+}
+
 function onMouseUp(e) {
-    if (e.button != 0 || e.target.closest(".KOSHIAN_response")) return;
-    if (selected_elm) {
-        selected_elm.parentNode.replaceChild(selected_text_node, selected_elm);
-        selected_elm = null;
-        selected_text_node = null;
-    }
+    if (e.button != 0 || (!selected_elm && !search_selected_length)) return;
+    // 左ボタンを離した場所が選択文字列のfont要素上なら中止
+    if (e.target.className == "KOSHIAN_selected_font") return;
+
+    // 選択文字列のfont要素をテキストノードに戻す
+    let koshian_response = e.target.closest(".KOSHIAN_response");
+    replaceText(koshian_response, "KOSHIAN_selected_font");
+    selected_elm = null;
+
     if (!search_selected_length) return;
+
     let sel = window.getSelection();
     let sel_str = sel.toString();
-    if (!sel_str) return;
-    if (sel_str.length < search_selected_length || sel_str.match(/[\r\n]/)) return;
-    let sel_parent_elm = sel.anchorNode.parentElement;
-    if (!sel_parent_elm.closest("blockquote")) return;
-
-    let font_elm = document.createElement("font");
-    font_elm.id = "selected";
-    try {
-        let sel_range = sel.getRangeAt(0);
-        sel_range.surroundContents(font_elm);
-        selected_elm = document.getElementById("selected");
-        selected_text_node = document.createTextNode(selected_elm.innerText);
-        let selected_index = 0;
-        for (let node = selected_elm.parentNode; node; node = node.parentNode) {
-            if (node.className == "rtd") {
-                let selected_reply_no = node.firstChild;
-                if (selected_reply_no.className == "KOSHIAN_reply_no") {
-                    selected_index = Number(selected_reply_no.innerText);
-                }
-                break;
-            }
-        }
-        if (selected_index) {
-            new Quote(selected_elm, selected_index, 0, null);
-        }
-    } catch(e) {
-//      console.log("res.js: surround contents error");
+    if (sel_str.length < search_selected_length ||
+        sel_str.match(/[\r\n]/) ||
+        sel.rangeCount > 1) return;
+    let sel_elm = sel.anchorNode;
+    if (sel_elm.nodeName != "BLOCKQUOTE") {
+        sel_elm = sel_elm.parentNode;
+        // 選択場所がレス本文以外なら中止
+        if (!checkBlockquote(sel_elm)) return;
     }
 
+    let font_elm = document.createElement("font");
+    font_elm.classList.add("KOSHIAN_selected_font");
+    font_elm.style.color = "red";
+    let sel_range = sel.getRangeAt(0);
+    if (sel.anchorNode.nodeName == "BLOCKQUOTE") {
+        let sel_start = sel.anchorNode.childNodes[sel.anchorOffset]
+        if (sel_start.nodeName == "FONT" && sel_start.className != "KOSHIAN_selected_font") {
+            // 選択始点に引用のfont要素があるので始点をテキストノードの前に移動
+            let first_text_node = sel.anchorNode.childNodes[sel.anchorOffset].firstChild;
+            sel_range.setStartBefore(first_text_node);
+            sel = window.getSelection();
+            sel_elm = sel.anchorNode.parentNode;
+        }
+    }
+    
+    try {
+        sel_range.surroundContents(font_elm);
+    } catch(e) {
+        if (sel.focusNode.nodeName == "BLOCKQUOTE") {
+            let node = null;
+            if (sel.anchorNode.nodeName == "FONT") {
+                node = sel.anchorNode.lastChild;
+            } else if (sel.anchorNode.nodeName == "#text") {
+                node = sel_elm.lastChild;
+            }
+            // 選択終点がblockquoteで始点がblockquote以外の場合
+            // 終点にテキスト以外のノードがあるので終点をテキストノードの後に移動
+            for (node; node; node = node.previousSibling) {
+                if (node.nodeType == Node.TEXT_NODE) {
+                    sel_range.setEndAfter(node);
+                    break;
+                }
+            }
+        }
+        try {
+            sel_range.surroundContents(font_elm);
+        } catch(e) {
+            console.log ("res.js: surround contents error: " + e);
+        }
+    } finally {
+        selected_elm = sel_elm.getElementsByClassName("KOSHIAN_selected_font")[0];
+        let selected_index = 0;
+        if (selected_elm) {
+            for (let elm = sel_elm; elm; elm = elm.parentElement) {
+                if (elm.className == "rtd" || elm.className == "KOSHIAN_response") {
+                    let selected_reply_no = elm.firstElementChild;
+                    if (selected_reply_no.className == "KOSHIAN_reply_no") {
+                        selected_index = Number(selected_reply_no.innerText);
+                    }
+                    break;
+                }
+            }
+            if (selected_index) {
+                new Quote(selected_elm, selected_index, selected_depth, selected_parent_list[selected_depth], true);
+            }
+        }
+    }
+}
+
+function replaceText(element, class_name){
+    // element要素下のクラス名class_nameの要素をテキストノードに置換
+    // elementがnullの時は全てのclass_nameをテキストノードに置換
+    element = element ? element : document;
+    let elements = element.getElementsByClassName(class_name);
+    if (elements) {
+        for (let i = 0; i < elements.length; i++) {
+            let text = getText(elements[i]);
+            if (text) {
+                let text_node = document.createTextNode(text);
+                let elm_parent = elements[i].parentNode;
+                elm_parent.replaceChild(text_node, elements[i]);
+            }
+        }
+    }
+
+    function getText(element){
+        // 子要素のテキストを含まないelementのテキストを取得
+        if (element.childNodes) {
+            return element.childNodes[0].wholeText;
+        }
+        return "";
+    }
+}
+
+function checkBlockquote(element){
+    // elementがblockquote内ならtrueを返す
+    for (element; element; element = element.parentNode) {
+        if (element.nodeName == "BLOCKQUOTE") return true;
+        if (element.className == "rtd" || element.className == "KOSHIAN_response") return false;
+    }
+    return false;
 }
 
 function safeGetValue(value, default_value) {

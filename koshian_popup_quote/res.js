@@ -57,7 +57,7 @@ class SearchTarget {
 
     searchResNo(no){
         // 検索文字列が数字の時はレスNo.の数字部分と比較
-        if (no.match(/^\d+$/)) {
+        if (no.match(/^\d+$/) && this.resno) {
             return this.resno.slice(3) == no;
         } else {
             return this.resno == no;
@@ -66,7 +66,7 @@ class SearchTarget {
 
     searchFileName(name){
         // 検索文字列が数字の時はファイル名の数字部分と比較
-        if (name.match(/^\d+$/)) {
+        if (name.match(/^\d+$/) && this.filename.match(/^\d+/)) {
             return this.filename.match(/^\d+/)[0] == name;
         } else {
             return this.filename == name;

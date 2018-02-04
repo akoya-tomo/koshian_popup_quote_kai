@@ -22,7 +22,7 @@
   赤い文字列は同じポップアップ内の赤い文字列以外の場所をクリックすればリセットされます。  
 
 ## インストール
-[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.1.0/koshian_popup_quote_kai-1.1.0-an.fx.xpi)  
+[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.1.1/koshian_popup_quote_kai-1.1.1-an.fx.xpi)  
 
 ## 設定
 機能の設定はアドオンのオプション画面から変更できます。  
@@ -54,6 +54,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.1.1 2018-02-04  
+  - 数字だけの文字列がポップアップしないことがある不具合を修正  
 * v1.1.0 2018-01-21  
   - 数字だけの文字列をレスNo.やファイル名として検索する機能を追加  
   - ポップアップしたレス内で選択文字列の引用元をポップアップ表示する機能を追加  

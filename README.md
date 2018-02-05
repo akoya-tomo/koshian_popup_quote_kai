@@ -22,7 +22,7 @@
   赤い文字列は同じポップアップ内の赤い文字列以外の場所をクリックすればリセットされます。  
 
 ## インストール
-[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.1.1/koshian_popup_quote_kai-1.1.1-an.fx.xpi)  
+[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.1.3/koshian_popup_quote_kai-1.1.3-an.fx.xpi)  
 
 ## 設定
 機能の設定はアドオンのオプション画面から変更できます。  

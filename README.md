@@ -3,7 +3,7 @@
 レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
 ※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
-※他のKOSHIANアドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki)の一覧からどうぞ  
+※他のKOSHIANアドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)の一覧からどうぞ  
 
 ## 機能
 * オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
@@ -23,6 +23,8 @@
 
 ## インストール
 [GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.1.3/koshian_popup_quote_kai-1.1.3-an.fx.xpi)  
+
+※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
 ## 設定
 機能の設定はアドオンのオプション画面から変更できます。  

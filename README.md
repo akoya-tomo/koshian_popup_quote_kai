@@ -1,9 +1,9 @@
 ## KOSHIAN 引用をポップアップで表示 改
-このFirefoxアドオンは[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)アドオンを改変したものです。  
+このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)アドオンを改変したものです。  
 レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
 ※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
-※他のKOSHIANアドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)の一覧からどうぞ  
+※他のこしあんアドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)の一覧からどうぞ  
 
 ## 機能
 * オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
@@ -43,7 +43,7 @@
 * [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/)のv1.2以前と組み合わせては使えません。  
   [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
 * 文字列選択で引用ポップアップするのはレス内の本文のみです。  
-  題名・なまえ・ID・IPやファイル名を文字列選択してもポップアップしません。  
+  題名・Name・ID・IPやファイル名を文字列選択してもポップアップしません。  
 * 複数行に跨る文字列選択ではポップアップしません。  
 * <s>ポップアップしたレスから更に文字列選択してポップアップすることはできません。</s>  
   v1.1よりポップアップしたレスから更に文字列選択してポップアップが可能になりました。  

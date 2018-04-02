@@ -214,7 +214,7 @@ class Quote {
             // 文字列選択ポップアップを前面にする
             this.zIndex = this.zIndex + 1;
         } else {
-            search_text = search_text.slice(1);
+            search_text = search_text.slice(1).replace(/^[\s　]+|[\s　]+$/g, "");
         }
         let origin_kouho = [];
 

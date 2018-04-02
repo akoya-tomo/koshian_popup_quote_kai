@@ -1,68 +1,68 @@
-## KOSHIAN ���p���|�b�v�A�b�v�ŕ\�� ��
-����Firefox�A�h�I���͂ӂ��΁������˂�ň��p�����|�b�v�A�b�v�\������[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)����[KOSHIAN ���p���|�b�v�A�b�v�ŕ\��](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)�A�h�I�������ς������̂ł��B  
-���X���̑I�𕶎���̈��p�����|�b�v�A�b�v�\������@�\�Ȃǂ�ǉ����܂����B  
+## KOSHIAN 引用をポップアップで表示 改
+このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)アドオンを改変したものです。  
+レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
-�����̃A�h�I����WebExtension�A�h�I���Ή���Firefox��p�ƂȂ�܂��B  
-�����̂�������A�h�I�����ϔł�Userscript��[������](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)�̈ꗗ����ǂ���  
+※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
+※他のこしあんアドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)の一覧からどうぞ  
 
-## �@�\
-* �I���W�i���̋@�\�iKOSHIAN ���p���|�b�v�A�b�v�ŕ\���j  
-  - �ӂ��΁������˂�̃X����ʂň��p�����|�b�v�A�b�v�ŕ\��  
-  - �X�����̃��X�ɒʂ��ԍ������ĕ\��  
-* �ǉ����ꂽ�@�\�iKOSHIAN ���p���|�b�v�A�b�v�ŕ\�� ���j  
-  - ���X���̑I�𕶎���̈��p�����|�b�v�A�b�v�\��  
-    ���X���̑I�𕶎���Ƀ}�E�X�I�[�o�[����ƁA�I�𕶎���̈��p�����|�b�v�A�b�v�\�����܂��B  
-    ���p���̖����摜�ԍ��⃌�X�ԍ��̈��p�����m�F�������Ƃ��Ȃǂɕ֗��ł��B  
-  - \(New\) ���������̕���������XNo.��t�@�C�����Ƃ��Č���  
-  �uNo.�v��g���q�̖������������̕���������XNo.��t�@�C�����Ƃ��Ĉ��p�����������܂��B  
-  �I�𕶎���|�b�v�A�b�v�ł��g�p�ł��܂��B  
-  - \(New\) �|�b�v�A�b�v�������X���őI�𕶎���̈��p�����|�b�v�A�b�v�\��  
-    �|�b�v�A�b�v�������X������I�𕶎���|�b�v�A�b�v���\�ɂȂ�܂����B  
-    �Ō�ɕ�����I�������|�b�v�A�b�v��艺�ɂ���|�b�v�A�b�v�̑I�𕶎���͐Ԃ��\������܂��B  
-  �Ԃ�������͓����|�b�v�A�b�v���̐Ԃ�������ȊO�̏ꏊ���N���b�N����΃��Z�b�g����܂��B  
+## 機能
+* オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
+  - ふたば☆ちゃんねるのスレ画面で引用元をポップアップで表示  
+  - スレ内のレスに通し番号をつけて表示  
+* 追加された機能（KOSHIAN 引用をポップアップで表示 改）  
+  - レス内の選択文字列の引用元をポップアップ表示  
+    レス内の選択文字列にマウスオーバーすると、選択文字列の引用元をポップアップ表示します。  
+    引用符の無い画像番号やレス番号の引用元を確認したいときなどに便利です。  
+  - \(New\) 数字だけの文字列をレスNo.やファイル名として検索  
+  「No.」や拡張子の無い数字だけの文字列をレスNo.やファイル名として引用元を検索します。  
+  選択文字列ポップアップでも使用できます。  
+  - \(New\) ポップアップしたレス内で選択文字列の引用元をポップアップ表示  
+    ポップアップしたレス内から選択文字列ポップアップが可能になりました。  
+    最後に文字列選択したポップアップより下にあるポップアップの選択文字列は赤く表示されます。  
+  赤い文字列は同じポップアップ内の赤い文字列以外の場所をクリックすればリセットされます。  
 
-## �C���X�g�[��
+## インストール
 [GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.1.3/koshian_popup_quote_kai-1.1.3-an.fx.xpi)  
 
-���u�ڑ��G���[�̂��߁A�A�h�I�����_�E�����[�h�ł��܂���ł����B�v�ƕ\������ăC���X�g�[���o���Ȃ����̓����N���E�N���b�N����xpi�t�@�C�����_�E�����[�h���A���j���[�̃c�[�����A�h�I���i�܂���Ctrl+Shift+A�j�ŕ\�����ꂽ�A�h�I���}�l�[�W���[�̃y�[�W��xpi�t�@�C�����h���b�O���h���b�v���ĉ������B  
+※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
-## �ݒ�
-�@�\�̐ݒ�̓A�h�I���̃I�v�V������ʂ���ύX�ł��܂��B  
+## 設定
+機能の設定はアドオンのオプション画面から変更できます。  
 
-* x�����ȏ�̑I������������̈��p��T���i�f�t�H���g�F0 = �����j  
-  - ���X���̑I�����������񂪐ݒ肵���������ȏ�̎��Ɉ��p����T���ă|�b�v�A�b�v���܂��B  
-    0�ŋ@�\�������ɂȂ�܂��B  
-    �Z���I�𕶎���Ƀ}�E�X�I�[�o�[���ă|�b�v�A�b�v����̂��ς킵���Ƃ��͑傫�߂̐�����ݒ肵�Ă��������B  
+* x文字以上の選択した文字列の引用を探す（デフォルト：0 = 無効）  
+  - レス内の選択した文字列が設定した文字数以上の時に引用元を探してポップアップします。  
+    0で機能が無効になります。  
+    短い選択文字列にマウスオーバーしてポップアップするのが煩わしいときは大きめの数字を設定してください。  
 
-## ���ӎ���  
-* ���̃A�h�I����WebExtension�A�h�I���Ή���Firefox��p�ł��B  
-* �{�A�h�I����L���������Ƃ��̓I���W�i���ł𖳌����܂��͍폜���ĉ������B  
-* �I���W�i���łƂ͕ʃA�h�I���Ȃ̂Őݒ�͏����l�ɖ߂�܂��B  
-  �ēx�ݒ�����肢�v���܂��B  
-* �ݒ�̕ύX��A�h�I���̍X�V�������ꍇ�͕\�����̃y�[�W�������[�h���ĉ������B  
-* [KOSHIAN ���������N����](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/)��v1.2�ȑO�Ƒg�ݍ��킹�Ă͎g���܂���B  
-  [KOSHIAN ���������N����](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3�ȏ�܂���[KOSHIAN ���������N���� ��](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)�Ƒg�ݍ��킹�Ă��g�p���������B  
-* ������I���ň��p�|�b�v�A�b�v����̂̓��X���̖{���݂̂ł��B  
-  �薼�EName�EID�EIP��t�@�C�����𕶎���I�����Ă��|�b�v�A�b�v���܂���B  
-* �����s�Ɍׂ镶����I���ł̓|�b�v�A�b�v���܂���B  
-* <s>�|�b�v�A�b�v�������X����X�ɕ�����I�����ă|�b�v�A�b�v���邱�Ƃ͂ł��܂���B</s>  
-  v1.1���|�b�v�A�b�v�������X����X�ɕ�����I�����ă|�b�v�A�b�v���\�ɂȂ�܂����B  
+## 注意事項  
+* このアドオンはWebExtensionアドオン対応のFirefox専用です。  
+* 本アドオンを有効化したときはオリジナル版を無効化または削除して下さい。  
+* オリジナル版とは別アドオンなので設定は初期値に戻ります。  
+  再度設定をお願い致します。  
+* 設定の変更やアドオンの更新をした場合は表示中のページをリロードして下さい。  
+* [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/)のv1.2以前と組み合わせては使えません。  
+  [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
+* 文字列選択で引用ポップアップするのはレス内の本文のみです。  
+  題名・Name・ID・IPやファイル名を文字列選択してもポップアップしません。  
+* 複数行に跨る文字列選択ではポップアップしません。  
+* <s>ポップアップしたレスから更に文字列選択してポップアップすることはできません。</s>  
+  v1.1よりポップアップしたレスから更に文字列選択してポップアップが可能になりました。  
 
-## ���m�̖��  
-* �Ԃ�������̕������當����I�����J�n����ƑI��͈͂��ω����邱�Ƃ�����B  
-  �Ԃ�������̕�������I���J�n�������Ƃ��͐�ɐԂ�����������Z�b�g���ĉ������B  
-* ���p���̕������I�����ă|�b�v�A�b�v����ƃ|�b�v�A�b�v���d�Ȃ��ĕ\������邱�Ƃ�����B  
-  ���p������ƑI�𕶎���̃|�b�v�A�b�v���قȂ�Ɣ������邱�Ƃ�����܂��B  
-  �I�𕶎���̃|�b�v�A�b�v���O�ʂɕ\������܂��B  
+## 既知の問題  
+* 赤い文字列の部分から文字列選択を開始すると選択範囲が変化することがある。  
+  赤い文字列の部分から選択開始したいときは先に赤い文字列をリセットして下さい。  
+* 引用内の文字列を選択してポップアップするとポップアップが重なって表示されることがある。  
+  引用文字列と選択文字列のポップアップが異なると発生することがあります。  
+  選択文字列のポップアップが前面に表示されます。  
 
-## �X�V����  
+## 更新履歴  
 * v1.1.3 2018-02-06  
-  - �A�h�I���̎����X�V��L����  
+  - アドオンの自動更新を有効化  
 * v1.1.1 2018-02-04  
-  - ���������̕����񂪃|�b�v�A�b�v���Ȃ����Ƃ�����s����C��  
+  - 数字だけの文字列がポップアップしないことがある不具合を修正  
 * v1.1.0 2018-01-21  
-  - ���������̕���������XNo.��t�@�C�����Ƃ��Č�������@�\��ǉ�  
-  - �|�b�v�A�b�v�������X���őI�𕶎���̈��p�����|�b�v�A�b�v�\������@�\��ǉ�  
+  - 数字だけの文字列をレスNo.やファイル名として検索する機能を追加  
+  - ポップアップしたレス内で選択文字列の引用元をポップアップ表示する機能を追加  
 * v1.0.0 2018-01-11  
-  - KOSHIAN ���p���|�b�v�A�b�v�ŕ\�� v1.3.1�x�[�X  
-  - ���X���̑I�𕶎���̈��p�����|�b�v�A�b�v�\������@�\��ǉ�  
+  - KOSHIAN 引用をポップアップで表示 v1.3.1ベース  
+  - レス内の選択文字列の引用元をポップアップ表示する機能を追加  

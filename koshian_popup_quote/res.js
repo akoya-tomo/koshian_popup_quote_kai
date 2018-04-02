@@ -4,6 +4,7 @@ const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
+const DEFAULT_USE_FUTABA_LIGHTBOX = false;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
@@ -13,6 +14,7 @@ let popup_time = DEFAULT_POPUP_TIME;
 let popup_indent = DEFAULT_POPUP_INDENT;
 let popup_todown = DEFAULT_POPUP_TODOWN;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
+let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
 let g_line_list = [];
 let g_response_list = [];
@@ -212,7 +214,7 @@ class Quote {
             // 文字列選択ポップアップを前面にする
             this.zIndex = this.zIndex + 1;
         } else {
-            search_text = search_text.slice(1);
+            search_text = search_text.slice(1).replace(/^[\s　]+|[\s　]+$/g, "");
         }
         let origin_kouho = [];
 
@@ -370,7 +372,12 @@ class Quote {
 
     hide(e) {
         if (this.popup) {
-            this.popup.style.display = "none";
+            if (use_futaba_lightbox) {
+                this.popup.remove();
+                this.initialized = false;
+            } else {
+                this.popup.style.display = "none";
+            }
             selected_depth = this.depth;
             //console.log("res.js: selected_depth = " + selected_depth);
         }
@@ -495,7 +502,7 @@ function onMouseUp(e) {
     font_elm.style.color = "red";
     let sel_range = sel.getRangeAt(0);
     if (sel.anchorNode.nodeName == "BLOCKQUOTE") {
-        let sel_start = sel.anchorNode.childNodes[sel.anchorOffset]
+        let sel_start = sel.anchorNode.childNodes[sel.anchorOffset];
         if (sel_start.nodeName == "FONT" && sel_start.className != "KOSHIAN_selected_font") {
             // 選択始点に引用のfont要素があるので始点をテキストノードの前に移動
             let first_text_node = sel.anchorNode.childNodes[sel.anchorOffset].firstChild;
@@ -598,6 +605,7 @@ function onLoadSetting(result) {
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
+    use_futaba_lightbox = safeGetValue(result.use_futaba_lightbox, DEFAULT_USE_FUTABA_LIGHTBOX);
 
     main();
 }
@@ -613,6 +621,7 @@ function onSettingChanged(changes, areaName) {
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
+    use_futaba_lightbox = safeGetValue(changes.use_futaba_lightbox.newValue, DEFAULT_USE_FUTABA_LIGHTBOX);
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

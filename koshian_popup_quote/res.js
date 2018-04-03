@@ -221,12 +221,6 @@ class Quote {
         for (let i = this.index - 1; i >= 0; --i) {
             let target = search_targets[i];
             let result = target.searchText(search_text);
-            
-            if(result == SEARCH_RESULT_PERFECT){
-                return target.index;
-            }else if(result == SEARCH_RESULT_MAYBE){
-                origin_kouho.push(target.index);
-            }
 
             if(search_resno && target.searchResNo(search_text)){
                 return target.index;
@@ -234,6 +228,12 @@ class Quote {
 
             if(search_file && target.searchFileName(search_text)){
                 return target.index;
+            }
+
+            if(result == SEARCH_RESULT_PERFECT){
+                return target.index;
+            }else if(result == SEARCH_RESULT_MAYBE){
+                origin_kouho.push(target.index);
             }
         }
 

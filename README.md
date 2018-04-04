@@ -22,7 +22,7 @@
     引用ポップアップしたレスに画像が含まれているとfutaba lightboxがその画像まで表示してしまいます。このオプションを有効にするとポップアップの画像がfutaba lightboxで表示されなくなります。  
 
 ## インストール
-[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.2.1/koshian_popup_quote_kai-1.2.1-an.fx.xpi)  
+[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.2.2/koshian_popup_quote_kai-1.2.2-an.fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -43,7 +43,7 @@
 * [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/)のv1.2以前と組み合わせては使えません。  
   [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
 * 文字列選択で引用ポップアップするのはレス内の本文のみです。  
-  題名・Name・ID・IPやファイル名を文字列選択してもポップアップしません。  
+  題名・Name・ID・IP・No.やファイル名を文字列選択してもポップアップしません。  
 * 複数行に跨る文字列選択ではポップアップしません。  
 
 ## 既知の問題  
@@ -54,6 +54,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.2.2 2018-04-04  
+  - アドオンを実行するサイトに[ふたポ](http://futapo.futakuro.com/)の過去ログ\(kako.futakuro.com\)を追加  
 * v1.2.1 2018-04-03  
   - 引用元の検索でレスNo.やファイル名の検索をレス内テキストより優先するように変更  
 * v1.2.0 2018-04-02  

@@ -3,7 +3,7 @@
 
     "name":"KOSHIAN 引用をポップアップで表示 改",
 
-    "version":"1.2.1",
+    "version":"1.2.2",
 
     "description":"引用元ををポップアップで表示します",
 
@@ -13,7 +13,7 @@
 
     "content_scripts":[
         {
-            "matches":["*://*.2chan.net/*/res/*"],
+            "matches":["*://*.2chan.net/*/res/*","*://kako.futakuro.com/futa/*_b/*"],
             "js":["res.js"]
         }
     ],

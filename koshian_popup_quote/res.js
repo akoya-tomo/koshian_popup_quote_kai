@@ -418,12 +418,14 @@ class Quote {
 }
 
 function putIndex(rtd, index){
-    let reply = document.createElement("span");
-    reply.className = "KOSHIAN_reply_no";
-    reply.textContent = `${index}`;
-    reply.style.color = `#601010`;
+    if (rtd.firstElementChild.className != "KOSHIAN_reply_no") {
+        let reply = document.createElement("span");
+        reply.className = "KOSHIAN_reply_no";
+        reply.textContent = `${index}`;
+        reply.style.color = `#601010`;
 
-    rtd.insertBefore(reply, rtd.firstChild);
+        rtd.insertBefore(reply, rtd.firstChild);
+    }
 }
 
 function createPopup(rtd, index){

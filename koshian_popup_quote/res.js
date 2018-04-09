@@ -275,7 +275,21 @@ class Quote {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.origin_index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            this.popup.appendChild(ch.cloneNode(true));
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+                let anchor = document.createElement("a");
+                anchor.href = "javascript:void(0);";
+                anchor.title = "このレスに移動";
+                anchor.innerText = ch.innerText;
+                anchor.addEventListener("click", () => {
+                    for (let popup = this; popup; popup = popup.parent) {
+                        popup.hide();
+                    }
+                    moveToResponse(ch);
+                }, false);
+                this.popup.appendChild(anchor);
+            } else {
+                this.popup.appendChild(ch.cloneNode(true));
+            }
         }
 
         this.popup.className = "KOSHIAN_response";
@@ -588,6 +602,16 @@ function checkBlockquote(element){
         if (element.className == "rtd" || element.className == "KOSHIAN_response") return false;
     }
     return false;
+}
+
+function moveToResponse(replyNo){
+    let input = replyNo.nextElementSibling;
+    if (input.nodeName == "INPUT" && input.id) {
+        let target = document.getElementById(input.id);
+        if (target) {
+            target.scrollIntoView(true);
+        }
+    }
 }
 
 function safeGetValue(value, default_value) {

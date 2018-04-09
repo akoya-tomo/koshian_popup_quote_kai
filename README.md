@@ -18,11 +18,13 @@
   - 数字だけの文字列をレスNo.やファイル名として検索  
     「No.」や拡張子の無い数字だけの文字列をレスNo.やファイル名として引用元を検索します。  
     選択文字列ポップアップでも使用できます。  
+  - \(New\) ポップアップしたレスの通番をクリックでそのレスに移動  
+    引用ポップアップしたレスの左上にあるレスの通番をクリックすると、そのレスに移動することができます。  
   - [futaba lightbox](https://github.com/akoya-tomo/futaba_lightbox/)でポップアップの画像を適用外にするオプション（デフォルト：無効）  
     引用ポップアップしたレスに画像が含まれているとfutaba lightboxがその画像まで表示してしまいます。このオプションを有効にするとポップアップの画像がfutaba lightboxで表示されなくなります。  
 
 ## インストール
-[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.2.2/koshian_popup_quote_kai-1.2.2-an.fx.xpi)  
+[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.3.0/koshian_popup_quote_kai-1.3.0-an.fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -54,6 +56,9 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.3.0 2018-04-09  
+  - ポップアップしたレスの通番をクリックするとそのレスに移動する機能を追加  
+  - 設定の変更やアドオンを更新したときに表示中のスレでレスの通番が重複して表示される不具合を修正  
 * v1.2.2 2018-04-04  
   - アドオンを実行するサイトに[ふたポ](http://futapo.futakuro.com/)の過去ログ\(kako.futakuro.com\)を追加  
 * v1.2.1 2018-04-03  

@@ -189,9 +189,34 @@ class Quote {
         });
 
         this.green_text.addEventListener("mouseleave", (e) => {
+            let related_target = e.relatedTarget;
+            if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
+                document.addEventListener("click", documentClick, false);
+                return;
+            }
             quote.mouseon = false;
             quote.hide(e);
             quote_mouse_down = false;
+
+            function documentClick(e) {
+                let e_target_closest = false;
+                for (let elm = e.target; elm; elm = elm.parentElement) {
+                    if (elm == quote.green_text) {
+                        e_target_closest = true;
+                    }
+                }
+                if (e.target !== null &&
+                    e.target.className != "KOSHIAN_QuoteMenuItem" &&
+                    e.target.className != "KOSHIAN_QuoteMenuText" &&
+                    !e_target_closest) {
+                    if (quote.mouseon) {
+                        quote.mouseon = false;
+                        quote.hide(e);
+                        quote_mouse_down = false;
+                    }
+                    document.removeEventListener("click", documentClick, false);
+                }
+            }
         });
 
         this.green_text.addEventListener("mousedown", (e) => {

@@ -4,7 +4,7 @@ const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
-const DEFAULT_USE_FUTABA_LIGHTBOX = false;
+const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
@@ -655,7 +655,6 @@ function onLoadSetting(result) {
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
-    use_futaba_lightbox = safeGetValue(result.use_futaba_lightbox, DEFAULT_USE_FUTABA_LIGHTBOX);
 
     main();
 }
@@ -671,7 +670,6 @@ function onSettingChanged(changes, areaName) {
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
-    use_futaba_lightbox = safeGetValue(changes.use_futaba_lightbox.newValue, DEFAULT_USE_FUTABA_LIGHTBOX);
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

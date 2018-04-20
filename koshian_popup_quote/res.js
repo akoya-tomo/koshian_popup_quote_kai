@@ -4,7 +4,7 @@ const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
-const DEFAULT_USE_FUTABA_LIGHTBOX = false;
+const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
@@ -16,9 +16,7 @@ let popup_todown = DEFAULT_POPUP_TODOWN;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
-let g_line_list = [];
 let g_response_list = [];
-let g_quote_index_list;
 let g_last_response_num = 0;
 let selected_elm;
 let selected_depth = 0;
@@ -189,18 +187,42 @@ class Quote {
         });
 
         this.green_text.addEventListener("mouseleave", (e) => {
+            let related_target = e.relatedTarget;
+            if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
+                document.addEventListener("click", documentClick, false);
+                return;
+            }
             quote.mouseon = false;
             quote.hide(e);
             quote_mouse_down = false;
+
+            function documentClick(e) {
+                let e_target_closest = false;
+                for (let elm = e.target; elm; elm = elm.parentElement) {
+                    if (elm == quote.green_text) {
+                        e_target_closest = true;
+                    }
+                }
+                if (e.target !== null &&
+                    e.target.className != "KOSHIAN_QuoteMenuItem" &&
+                    e.target.className != "KOSHIAN_QuoteMenuText" &&
+                    !e_target_closest) {
+                    if (quote.mouseon) {
+                        quote.mouseon = false;
+                        quote.hide(e);
+                        quote_mouse_down = false;
+                    }
+                    document.removeEventListener("click", documentClick, false);
+                }
+            }
         });
 
         this.green_text.addEventListener("mousedown", (e) => {
-            if (e.button == 0 &&
-                e.target.nodeName == "FONT" &&
+            if (e.target.nodeName == "FONT" &&
                 !quote.select &&
                 quote.depth == selected_depth - 1 &&
                 !quote_mouse_down) {
-                // 引用の上で左ボタン押下したらポップアップ抑制（文字列選択ポップアップ作成優先）
+                // 引用の上でマウスボタン押下したらポップアップ抑制（引用メニュー対策＆文字列選択ポップアップ作成優先）
                 quote.mouseon = false;
                 quote.hide(e);
                 quote_mouse_down = true;
@@ -631,7 +653,6 @@ function onLoadSetting(result) {
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
-    use_futaba_lightbox = safeGetValue(result.use_futaba_lightbox, DEFAULT_USE_FUTABA_LIGHTBOX);
 
     main();
 }
@@ -647,7 +668,6 @@ function onSettingChanged(changes, areaName) {
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
-    use_futaba_lightbox = safeGetValue(changes.use_futaba_lightbox.newValue, DEFAULT_USE_FUTABA_LIGHTBOX);
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

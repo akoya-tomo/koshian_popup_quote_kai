@@ -3,13 +3,17 @@
 
     "name":"KOSHIAN 引用をポップアップで表示 改",
 
-    "version":"1.4.0",
+    "version":"1.4.1",
 
     "description":"引用元ををポップアップで表示します",
 
     "icons":{
         "48":"icons/icon-48.png"
     },
+
+    "author": "akoya_tomo",
+
+    "homepage_url": "https://github.com/akoya-tomo/koshian_popup_quote_kai/",
 
     "content_scripts":[
         {

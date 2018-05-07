@@ -42,7 +42,7 @@ class SearchTarget {
             let find = this.lines[i].indexOf(text);
 
             if(find != -1){
-                if(this.lines[i][0] != ">" || text.length == this.lines[i].length){
+                if(text.length == this.lines[i].length){
                     return SEARCH_RESULT_PERFECT;
                 }else{
                     have_maybe = true;
@@ -242,7 +242,6 @@ class Quote {
 
         for (let i = this.index - 1; i >= 0; --i) {
             let target = search_targets[i];
-            let result = target.searchText(search_text);
 
             if(search_resno && target.searchResNo(search_text)){
                 return target.index;
@@ -252,6 +251,7 @@ class Quote {
                 return target.index;
             }
 
+            let result = target.searchText(search_text);
             if(result == SEARCH_RESULT_PERFECT){
                 return target.index;
             }else if(result == SEARCH_RESULT_MAYBE){

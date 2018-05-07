@@ -11,6 +11,10 @@
         "48":"icons/icon-48.png"
     },
 
+    "author": "akoya_tomo",
+
+    "homepage_url": "https://github.com/akoya-tomo/koshian_popup_quote_kai/",
+
     "content_scripts":[
         {
             "matches":["*://*.2chan.net/*/res/*","*://kako.futakuro.com/futa/*_b/*"],

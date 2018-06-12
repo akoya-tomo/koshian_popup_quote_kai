@@ -78,16 +78,21 @@ class SearchTarget {
         let filename = "";
 
         if(search_resno){
-            for (let node = thre.firstChild; node; node = node.nextSibling) {
-                if (node.nodeType == Node.ELEMENT_NODE && node.nodeName == "BLOCKQUOTE") {
-                    break;
-                }
-    
-                if(node.nodeType == Node.TEXT_NODE){
-                    let matches = node.nodeValue.match(/(No\.[0-9]+)/);
-                    if (matches) {
-                        resno = matches[1];
+            let number_button = document.querySelector(".thre>.KOSHIAN_NumberButton");
+            if (number_button) {
+                resno = number_button.textContent;
+            } else {
+                for (let node = thre.firstChild; node; node = node.nextSibling) {
+                    if (node.nodeType == Node.ELEMENT_NODE && node.nodeName == "BLOCKQUOTE") {
                         break;
+                    }
+    
+                    if(node.nodeType == Node.TEXT_NODE){
+                        let matches = node.nodeValue.match(/(No\.[0-9]+)/);
+                        if (matches) {
+                            resno = matches[1];
+                            break;
+                        }
                     }
                 }
             }
@@ -116,6 +121,11 @@ class SearchTarget {
     }
 
     static getResNo(blockquote) {
+        let number_buttons = blockquote.parentNode.getElementsByClassName("KOSHIAN_NumberButton");
+        if (number_buttons.length) {
+            return number_buttons[0].textContent;
+        }
+
         for (let node = blockquote.parentNode.firstChild; node; node = node.nextSibling) {
             if (node.nodeType == Node.TEXT_NODE) {
                 let matches = node.nodeValue.match(/(No\.[0-9]+)/);

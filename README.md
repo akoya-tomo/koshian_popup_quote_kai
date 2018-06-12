@@ -20,7 +20,7 @@
     引用ポップアップしたレスの左上にあるレス番号をクリックすると、そのレスに移動することができます。  
 
 ## インストール
-[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.4.1/koshian_popup_quote_kai-1.4.1-an.fx.xpi)  
+[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.5.0/koshian_popup_quote_kai-1.5.0-an.fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -56,6 +56,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.5.0 2018-06-12  
+  - [KOSHIAN 引用メニュー 改](https://github.com/akoya-tomo/koshian_quote_futaba_kai)の「No.をクリックで引用する」オプションに対応  
 * v1.4.1 2018-05-07  
   - オリジナルの引用元の検索を厳格化  
 * v1.4.0 2018-04-20  

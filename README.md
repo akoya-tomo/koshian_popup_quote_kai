@@ -1,5 +1,5 @@
 ## <sub><img src="/koshian_popup_quote/icons/icon-48.png"></sub> KOSHIAN 引用をポップアップで表示 改
-このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)を改変したものです。  
+このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)の非公式改変版です。  
 レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
 ※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
@@ -7,14 +7,14 @@
 
 ## 機能
 * オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
-  - スレ画面で引用元をポップアップで表示  
+  - レス送信モードで引用元をポップアップで表示  
     ![スクリーンショット](/images/screenshot01.png "スクリーンショット")  
   - スレ内のレスに通しのレス番号をつけて表示  
 * 追加された機能（KOSHIAN 引用をポップアップで表示 改）  
   - レス内の選択文字列の引用元をポップアップ表示  
     レス内の選択文字列にマウスオーバーすると、選択文字列の引用元をポップアップ表示します。  
     ![スクリーンショット](/images/screenshot02.png "スクリーンショット")  
-    引用符の無い画像番号やレス番号の引用元を確認したいときなどに便利です。  
+    引用符の無い画像ファイル名やレスNo.の引用元を確認したいときなどに便利です。  
   - 数字だけの文字列をレスNo.やファイル名として検索  
     「No.」や拡張子の無い数字だけの文字列をレスNo.やファイル名として引用元をポップアップ表示します。  
     ![スクリーンショット](/images/screenshot03.png "スクリーンショット")  

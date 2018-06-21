@@ -101,7 +101,11 @@ class SearchTarget {
         if(search_file){
             let anchor = thre.getElementsByTagName("a")[0];
             if(anchor){
-                filename = anchor.textContent;
+                if(anchor.download){
+                    filename = anchor.download;
+                } else {
+                    filename = anchor.textContent;
+                }
             }
         }
 

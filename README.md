@@ -1,26 +1,30 @@
-## KOSHIAN 引用をポップアップで表示 改
-このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)アドオンを改変したものです。  
+## <sub><img src="/koshian_popup_quote/icons/icon-48.png"></sub> KOSHIAN 引用をポップアップで表示 改
+このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)を改変したものです。  
 レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
 ※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
-※他のこしあんアドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)の一覧からどうぞ  
+※ふたば閲覧を支援する「こしあん」アドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)  
 
 ## 機能
 * オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
   - スレ画面で引用元をポップアップで表示  
+    ![スクリーンショット](/images/screenshot01.png "スクリーンショット")  
   - スレ内のレスに通しのレス番号をつけて表示  
 * 追加された機能（KOSHIAN 引用をポップアップで表示 改）  
   - レス内の選択文字列の引用元をポップアップ表示  
     レス内の選択文字列にマウスオーバーすると、選択文字列の引用元をポップアップ表示します。  
+    ![スクリーンショット](/images/screenshot02.png "スクリーンショット")  
     引用符の無い画像番号やレス番号の引用元を確認したいときなどに便利です。  
   - 数字だけの文字列をレスNo.やファイル名として検索  
-    「No.」や拡張子の無い数字だけの文字列をレスNo.やファイル名として引用元を検索します。  
+    「No.」や拡張子の無い数字だけの文字列をレスNo.やファイル名として引用元をポップアップ表示します。  
+    ![スクリーンショット](/images/screenshot03.png "スクリーンショット")  
     選択文字列ポップアップでも使用できます。  
   - ポップアップしたレスのレス番号をクリックでそのレスに移動  
     引用ポップアップしたレスの左上にあるレス番号をクリックすると、そのレスに移動することができます。  
 
 ## インストール
-[GitHub](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.5.0/koshian_popup_quote_kai-1.5.0-an.fx.xpi)  
+**GitHub**  
+[![インストールボタン](/images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.5.1/koshian_popup_quote_kai-1.5.1-an.fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -40,7 +44,6 @@
 * 複数行に跨る文字列選択ではポップアップしません。  
 
 ## 注意事項  
-* このアドオンはWebExtensionアドオン対応のFirefox専用です。  
 * 本アドオンを有効化したときはオリジナル版を無効化または削除して下さい。  
 * オリジナル版とは別アドオンなので設定は初期値に戻ります。  
   再度設定をお願い致します。  
@@ -56,6 +59,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.5.1 2018-06-21  
+  - [KOSHIAN 画像保存ボタン](https://github.com/akoya-tomo/koshian_image_save_button)で保存ボタンを表示するとスレ画像ファイル名が引用ポップアップしない不具合修正  
 * v1.5.0 2018-06-12  
   - [KOSHIAN 引用メニュー 改](https://github.com/akoya-tomo/koshian_quote_futaba_kai)の「No.をクリックで引用する」オプションに対応  
 * v1.4.1 2018-05-07  

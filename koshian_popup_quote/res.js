@@ -314,6 +314,7 @@ class Quote {
             if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
+                anchor.className = "KOSHIAN_reply_no";
                 anchor.title = "このレスに移動";
                 anchor.innerText = ch.innerText;
                 anchor.addEventListener("click", () => {

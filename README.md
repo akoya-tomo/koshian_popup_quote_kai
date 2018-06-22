@@ -1,30 +1,30 @@
-## <sub><img src="/koshian_popup_quote/icons/icon-48.png"></sub> KOSHIAN 引用をポップアップで表示 改
+## <sub><img src="koshian_popup_quote/icons/icon-48.png"></sub> KOSHIAN 引用をポップアップで表示 改
 このFirefoxアドオンはふたば☆ちゃんねるで引用元をポップアップ表示する[Pachira](https://addons.mozilla.org/ja/firefox/user/anonymous-a0bba9187b568f98732d22d51c5955a6/)氏の[KOSHIAN 引用をポップアップで表示](https://addons.mozilla.org/ja/firefox/addon/koshian-popup-quote/)の非公式改変版です。  
 レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
 ※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
-※ふたば閲覧を支援する「こしあん」アドオン改変版やUserscriptは[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)  
+※他の「こしあん」改変版などのふたば支援ツール一覧は[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)。  
 
 ## 機能
 * オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
   - レス送信モードで引用元をポップアップで表示  
-    ![スクリーンショット](/images/screenshot01.png "スクリーンショット")  
+    ![スクリーンショット](images/screenshot01.png "スクリーンショット")  
   - スレ内のレスに通しのレス番号をつけて表示  
 * 追加された機能（KOSHIAN 引用をポップアップで表示 改）  
   - レス内の選択文字列の引用元をポップアップ表示  
     レス内の選択文字列にマウスオーバーすると、選択文字列の引用元をポップアップ表示します。  
-    ![スクリーンショット](/images/screenshot02.png "スクリーンショット")  
+    ![スクリーンショット](images/screenshot02.png "スクリーンショット")  
     引用符の無い画像ファイル名やレスNo.の引用元を確認したいときなどに便利です。  
   - 数字だけの文字列をレスNo.やファイル名として検索  
     「No.」や拡張子の無い数字だけの文字列をレスNo.やファイル名として引用元をポップアップ表示します。  
-    ![スクリーンショット](/images/screenshot03.png "スクリーンショット")  
+    ![スクリーンショット](images/screenshot03.png "スクリーンショット")  
     選択文字列ポップアップでも使用できます。  
   - ポップアップしたレスのレス番号をクリックでそのレスに移動  
     引用ポップアップしたレスの左上にあるレス番号をクリックすると、そのレスに移動することができます。  
 
 ## インストール
 **GitHub**  
-[![インストールボタン](/images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.5.1/koshian_popup_quote_kai-1.5.1-an.fx.xpi)  
+[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.5.2/koshian_popup_quote_kai-1.5.2-an.fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -39,6 +39,7 @@
 ## 追加機能の補足  
 * ポップアップ内でも文字列選択して更に引用ポップアップが可能です。  
   最後に文字列選択したポップアップより下にあるポップアップの選択文字列は赤い文字で表示され、赤い文字列と同じポップアップ内をクリックでリセットできます。  
+  ![スクリーンショット](images/screenshot04.png "スクリーンショット")  
 * 文字列選択で引用ポップアップするのはレス内の本文のみです。  
   題名・Name・ID・IP・No.やファイル名を文字列選択してもポップアップしません。  
 * 複数行に跨る文字列選択ではポップアップしません。  
@@ -59,6 +60,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.5.2 2018-06-22  
+  - v1.3.0以降で引用ポップアップ内での選択文字列ポップアップが機能しない不具合修正  
 * v1.5.1 2018-06-21  
   - [KOSHIAN 画像保存ボタン](https://github.com/akoya-tomo/koshian_image_save_button)で保存ボタンを表示するとスレ画像ファイル名が引用ポップアップしない不具合修正  
 * v1.5.0 2018-06-12  

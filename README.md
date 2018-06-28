@@ -3,7 +3,7 @@
 レス内の選択文字列の引用元をポップアップ表示する機能などを追加しました。  
 
 ※このアドオンはWebExtensionアドオン対応のFirefox専用となります。  
-※他の「こしあん」改変版などのふたば支援ツール一覧は[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)。  
+※他のKOSHIAN改変版などのふたば支援ツール一覧は[こちら](https://github.com/akoya-tomo/futaba_auto_reloader_K/wiki/)。  
 
 ## 機能
 * オリジナルの機能（KOSHIAN 引用をポップアップで表示）  
@@ -21,10 +21,14 @@
     選択文字列ポップアップでも使用できます。  
   - ポップアップしたレスのレス番号をクリックでそのレスに移動  
     引用ポップアップしたレスの左上にあるレス番号をクリックすると、そのレスに移動することができます。  
+  - \(New\) 「現在のレスに近いレスをポップアップ」オプションを追加（デフォルト：無効）  
+    引用元の候補の中で現在のレスに一番近いレスを引用ポップアップします。  
+  - \(New\) 「行単位で一致するレスを優先してポップアップ」オプションを追加（デフォルト：有効）  
+    行単位で完全に一致する引用元のレスを優先して引用ポップアップします。  
 
 ## インストール
 **GitHub**  
-[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.5.2/koshian_popup_quote_kai-1.5.2-an.fx.xpi)  
+[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.6.0/koshian_popup_quote_kai-1.6.0-an.fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -49,7 +53,7 @@
 * オリジナル版とは別アドオンなので設定は初期値に戻ります。  
   再度設定をお願い致します。  
 * 設定の変更やアドオンの更新をした場合は表示中のページをリロードして下さい。  
-* [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/)のv1.2以前と組み合わせては使えません。  
+* KOSHIAN 自動リンク生成のv1.2以前と組み合わせては使えません。  
   [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
 
 ## 既知の問題  
@@ -60,6 +64,11 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.6.0 2018-06-28  
+  - 「現在のレスに近いレスをポップアップ」オプションを追加  
+  - 「行単位で一致するレスを優先してポップアップ」オプションを追加  
+  - 引用ポップアップ内で他のKOSHIANのボタンが動作するように修正  
+    （但しボタンを動作させるには該当するKOSHIANの修正も必要）  
 * v1.5.2 2018-06-22  
   - v1.3.0以降で引用ポップアップ内での選択文字列ポップアップが機能しない不具合修正  
 * v1.5.1 2018-06-21  

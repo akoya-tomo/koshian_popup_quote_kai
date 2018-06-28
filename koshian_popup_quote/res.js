@@ -4,6 +4,7 @@ const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
 const DEFAULT_POPUP_NEAR = false;
+const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
@@ -15,6 +16,7 @@ let popup_time = DEFAULT_POPUP_TIME;
 let popup_indent = DEFAULT_POPUP_INDENT;
 let popup_todown = DEFAULT_POPUP_TODOWN;
 let popup_near = DEFAULT_POPUP_NEAR;
+let popup_perfect = DEFAULT_POPUP_PERFECT;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
@@ -269,7 +271,11 @@ class Quote {
 
             let result = target.searchText(search_text);
             if(result == SEARCH_RESULT_PERFECT){
-                return target.index;
+                if(popup_perfect){
+                    return target.index;
+                }else{
+                    origin_kouho.push(target.index);
+                }
             }else if(result == SEARCH_RESULT_MAYBE){
                 origin_kouho.push(target.index);
             }
@@ -674,6 +680,7 @@ function onLoadSetting(result) {
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
     popup_near = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);
+    popup_perfect = safeGetValue(result.popup_perfect, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
 
     main();
@@ -690,6 +697,7 @@ function onSettingChanged(changes, areaName) {
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
     popup_near = safeGetValue(changes.popup_near.newValue, DEFAULT_POPUP_NEAR);
+    popup_perfect = safeGetValue(changes.popup_perfect.newValue, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
 }
 

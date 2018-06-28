@@ -3,6 +3,7 @@ const DEFAULT_SEARCH_FILE = true;
 const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
+const DEFAULT_POPUP_NEAR = false;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
@@ -13,6 +14,7 @@ let search_file = DEFAULT_SEARCH_FILE;
 let popup_time = DEFAULT_POPUP_TIME;
 let popup_indent = DEFAULT_POPUP_INDENT;
 let popup_todown = DEFAULT_POPUP_TODOWN;
+let popup_near = DEFAULT_POPUP_NEAR;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
@@ -274,7 +276,11 @@ class Quote {
         }
 
         if (origin_kouho.length > 0) {
-            return origin_kouho[origin_kouho.length - 1];
+            if (popup_near) {
+                return origin_kouho[0];
+            } else {
+                return origin_kouho[origin_kouho.length - 1];
+            }
         } else {
             return -1;
         }
@@ -667,6 +673,7 @@ function onLoadSetting(result) {
     popup_time = Number(safeGetValue(result.popup_time, DEFAULT_POPUP_TIME));
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
+    popup_near = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
 
     main();
@@ -682,6 +689,7 @@ function onSettingChanged(changes, areaName) {
     popup_time = Number(safeGetValue(changes.popup_time.newValue, DEFAULT_POPUP_TIME));
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
+    popup_near = safeGetValue(changes.popup_near.newValue, DEFAULT_POPUP_NEAR);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
 }
 

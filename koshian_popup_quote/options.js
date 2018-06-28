@@ -3,6 +3,7 @@ const DEFAULT_SEARCH_FILE = true;
 const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
+const DEFAULT_POPUP_NEAR = false;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 
 function safeGetValue(value, default_value) {
@@ -21,6 +22,7 @@ function saveOptions(e) {
     popup_time: document.querySelector("#popup_time").value,
     popup_indent: document.querySelector("#popup_indent").value,
     popup_todown: document.querySelector("#popup_todown").checked,
+    popup_near: document.querySelector("#popup_near").checked,
     search_selected_length: document.querySelector("#search_selected_length").value
   });
 }
@@ -31,6 +33,7 @@ function setCurrentChoice(result) {
   document.querySelector("#popup_time").value = safeGetValue(result.popup_time, DEFAULT_POPUP_TIME);
   document.querySelector("#popup_indent").value = safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT);
   document.querySelector("#popup_todown").checked = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
+  document.querySelector("#popup_near").checked = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);
   document.querySelector("#search_selected_length").value = safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH);
 
   document.querySelector("#save_button").addEventListener("click", saveOptions);

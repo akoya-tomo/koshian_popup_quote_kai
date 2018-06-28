@@ -3,6 +3,8 @@ const DEFAULT_SEARCH_FILE = true;
 const DEFAULT_POPUP_TIME = 100;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = false;
+const DEFAULT_POPUP_NEAR = false;
+const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
@@ -13,6 +15,8 @@ let search_file = DEFAULT_SEARCH_FILE;
 let popup_time = DEFAULT_POPUP_TIME;
 let popup_indent = DEFAULT_POPUP_INDENT;
 let popup_todown = DEFAULT_POPUP_TODOWN;
+let popup_near = DEFAULT_POPUP_NEAR;
+let popup_perfect = DEFAULT_POPUP_PERFECT;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
@@ -267,14 +271,22 @@ class Quote {
 
             let result = target.searchText(search_text);
             if(result == SEARCH_RESULT_PERFECT){
-                return target.index;
+                if(popup_perfect){
+                    return target.index;
+                }else{
+                    origin_kouho.push(target.index);
+                }
             }else if(result == SEARCH_RESULT_MAYBE){
                 origin_kouho.push(target.index);
             }
         }
 
         if (origin_kouho.length > 0) {
-            return origin_kouho[origin_kouho.length - 1];
+            if (popup_near) {
+                return origin_kouho[0];
+            } else {
+                return origin_kouho[origin_kouho.length - 1];
+            }
         } else {
             return -1;
         }
@@ -418,6 +430,32 @@ class Quote {
             selected_depth = this.depth + 1;
             //console.log("res.js: selected_depth = " + selected_depth);
             selected_parent_list[selected_depth] = this;
+
+            let number_buttons = this.popup.getElementsByClassName("KOSHIAN_NumberButton");
+            if (number_buttons.length) {
+                //KOSHIAN 引用メニュー 改のNo.ボタンのclassを書換
+                number_buttons[0].className = "KOSHIAN_PopupNumber";
+            }
+
+            let hide_buttons = this.popup.getElementsByClassName("KOSHIAN_HideButton");
+            if (hide_buttons.length) {
+                //KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                hide_buttons[0].className = "KOSHIAN_PopupHide";
+            }
+
+            let ng_switches = this.popup.getElementsByClassName("KOSHIAN_NGSwitch");
+            if (ng_switches.length) {
+                //KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                ng_switches[0].className = "KOSHIAN_PopupNG";
+            }
+
+            let save_buttons = this.popup.getElementsByClassName("KOSHIAN_SaveButton");
+            if (save_buttons.length) {
+                //KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
+                save_buttons[0].className = "KOSHIAN_PopupSave";
+            }
+
+            document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
         }
     }
 
@@ -667,6 +705,8 @@ function onLoadSetting(result) {
     popup_time = Number(safeGetValue(result.popup_time, DEFAULT_POPUP_TIME));
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
+    popup_near = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);
+    popup_perfect = safeGetValue(result.popup_perfect, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
 
     main();
@@ -682,6 +722,8 @@ function onSettingChanged(changes, areaName) {
     popup_time = Number(safeGetValue(changes.popup_time.newValue, DEFAULT_POPUP_TIME));
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
+    popup_near = safeGetValue(changes.popup_near.newValue, DEFAULT_POPUP_NEAR);
+    popup_perfect = safeGetValue(changes.popup_perfect.newValue, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
 }
 

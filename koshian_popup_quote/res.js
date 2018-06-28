@@ -430,6 +430,32 @@ class Quote {
             selected_depth = this.depth + 1;
             //console.log("res.js: selected_depth = " + selected_depth);
             selected_parent_list[selected_depth] = this;
+
+            let number_buttons = this.popup.getElementsByClassName("KOSHIAN_NumberButton");
+            if (number_buttons.length) {
+                //KOSHIAN 引用メニュー 改のNo.ボタンのclassを書換
+                number_buttons[0].className = "KOSHIAN_PopupNumber";
+            }
+
+            let hide_buttons = this.popup.getElementsByClassName("KOSHIAN_HideButton");
+            if (hide_buttons.length) {
+                //KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                hide_buttons[0].className = "KOSHIAN_PopupHide";
+            }
+
+            let ng_switches = this.popup.getElementsByClassName("KOSHIAN_NGSwitch");
+            if (ng_switches.length) {
+                //KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                ng_switches[0].className = "KOSHIAN_PopupNG";
+            }
+
+            let save_buttons = this.popup.getElementsByClassName("KOSHIAN_SaveButton");
+            if (save_buttons.length) {
+                //KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
+                save_buttons[0].className = "KOSHIAN_PopupSave";
+            }
+
+            document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
         }
     }
 

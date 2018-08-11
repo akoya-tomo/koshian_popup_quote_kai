@@ -57,6 +57,7 @@
   [KOSHIAN 自動リンク生成](https://addons.mozilla.org/ja/firefox/addon/koshian-autolink-futaba/) v1.3以上または[KOSHIAN 自動リンク生成 改](https://github.com/akoya-tomo/koshian_autolink_futaba_kai/)と組み合わせてご使用ください。  
 
 ## 既知の問題  
+* 選択文字列にKOSHIAN 自動リンク生成（改）が生成したリンクが含まれていると、文字列選択ポップアップは動作しません。  
 * 赤い文字列の部分から文字列選択を開始すると選択範囲が変化することがある。  
   赤い文字列の部分から選択開始したいときは先に赤い文字列をリセットして下さい。  
 * 引用内の文字列を選択してポップアップするとポップアップが重なって表示されることがある。  

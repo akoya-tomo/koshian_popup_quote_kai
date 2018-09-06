@@ -236,9 +236,8 @@ class Quote {
         });
 
         this.green_text.addEventListener("mousedown", (e) => {
-            if (e.target.nodeName == "FONT" &&
-                !quote.select &&
-                quote.depth == selected_depth - 1 &&
+            if (this.green_text == e.target &&
+                this.popup &&
                 !quote_mouse_down) {
                 // 引用の上でマウスボタン押下したらポップアップ抑制（引用メニュー対策＆文字列選択ポップアップ作成優先）
                 quote.mouseon = false;

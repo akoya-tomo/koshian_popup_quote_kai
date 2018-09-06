@@ -129,9 +129,9 @@ class SearchTarget {
     }
 
     static getResNo(blockquote) {
-        let number_buttons = blockquote.parentNode.getElementsByClassName("KOSHIAN_NumberButton");
-        if (number_buttons.length) {
-            return number_buttons[0].textContent;
+        let number_button = blockquote.parentNode.getElementsByClassName("KOSHIAN_NumberButton")[0];
+        if (number_button) {
+            return number_button.textContent;
         }
 
         for (let node = blockquote.parentNode.firstChild; node; node = node.nextSibling) {
@@ -160,8 +160,17 @@ class SearchTarget {
 
 let search_targets = [];
 
+/**
+ * 引用
+ * @param {HTMLFontElement} green_text 引用のFont要素
+ * @param {number} index 引用のあるレスのレス番号（スレ内の通番）
+ * @param {number} depth ポップアップの深さ
+ * @param {Quote} parent 親ポップアップの引用クラス
+ * @param {boolean} is_selected 文字列選択による引用か
+ * @constructor  
+ */
 class Quote {
-    constructor(green_text, index, depth = 0, parent = null, select = false) {
+    constructor(green_text, index, depth = 0, parent = null, is_selected = false) {
         this.green_text = green_text;
         this.index = index;
         this.origin_index = -1;
@@ -171,7 +180,7 @@ class Quote {
         this.initialized = false;
         this.mouseon = false;
         this.timer = false;
-        this.select = select;
+        this.is_selected = is_selected;
         if (this.parent) {
             this.zIndex = this.parent.zIndex;
         } else {
@@ -236,9 +245,8 @@ class Quote {
         });
 
         this.green_text.addEventListener("mousedown", (e) => {
-            if (e.target.nodeName == "FONT" &&
-                !quote.select &&
-                quote.depth == selected_depth - 1 &&
+            if (this.green_text == e.target &&
+                this.popup &&
                 !quote_mouse_down) {
                 // 引用の上でマウスボタン押下したらポップアップ抑制（引用メニュー対策＆文字列選択ポップアップ作成優先）
                 quote.mouseon = false;
@@ -250,11 +258,11 @@ class Quote {
 
     findOriginIndex() {
         let search_text = this.green_text.innerText;
-        if (this.select) {
+        if (this.is_selected) {
             // 文字列選択ポップアップを前面にする
             this.zIndex = this.zIndex + 1;
         } else {
-            search_text = search_text.slice(1).replace(/^[\s　]+|[\s　]+$/g, "");
+            search_text = search_text.slice(1).replace(/^[\s]+|[\s]+$/g, "");
         }
         let origin_kouho = [];
 
@@ -384,7 +392,7 @@ class Quote {
                 let green_text_rect = e.target.getBoundingClientRect();
                 let relative_top = green_text_rect.top - parent_popup_rect.top;
                 let relative_left = green_text_rect.left - parent_popup_rect.left;
-                if (this.select) {
+                if (this.is_selected) {
                     // 文字列選択ポップアップはレス本文をポップアップleft位置基準にする
                     let green_text_parent_rect = e.target.parentElement.getBoundingClientRect();
                     relative_left = green_text_parent_rect.left - parent_popup_rect.left;
@@ -409,7 +417,7 @@ class Quote {
                 }
 
                 this.popup.style.left = `${rc.left + popup_indent}px`;
-                if (this.select) {
+                if (this.is_selected) {
                     // 文字列選択ポップアップはレス本文をポップアップleft位置基準にする
                     let rc_parent = Quote.getPopupPosition(e.clientX, e.clientY, this.green_text.parentElement);
                     this.popup.style.left = `${rc_parent.left + popup_indent}px`;
@@ -431,28 +439,28 @@ class Quote {
             //console.log("res.js: selected_depth = " + selected_depth);
             selected_parent_list[selected_depth] = this;
 
-            let number_buttons = this.popup.getElementsByClassName("KOSHIAN_NumberButton");
-            if (number_buttons.length) {
-                //KOSHIAN 引用メニュー 改のNo.ボタンのclassを書換
-                number_buttons[0].className = "KOSHIAN_PopupNumber";
+            let number_button = this.popup.getElementsByClassName("KOSHIAN_NumberButton")[0];
+            if (number_button) {
+                // KOSHIAN 引用メニュー 改のNo.ボタンのclassを書換
+                number_button.className = "KOSHIAN_PopupNumber";
             }
 
-            let hide_buttons = this.popup.getElementsByClassName("KOSHIAN_HideButton");
-            if (hide_buttons.length) {
-                //KOSHIAN NG 改の[隠す]ボタンのclassを書換
-                hide_buttons[0].className = "KOSHIAN_PopupHide";
+            let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
+            if (hide_button) {
+                // KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                hide_button.className = "KOSHIAN_PopupHide";
             }
 
-            let ng_switches = this.popup.getElementsByClassName("KOSHIAN_NGSwitch");
-            if (ng_switches.length) {
-                //KOSHIAN NG 改の[NGワード]ボタンのclassを書換
-                ng_switches[0].className = "KOSHIAN_PopupNG";
+            let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+            if (ng_switch) {
+                // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                ng_switch.className = "KOSHIAN_PopupNG";
             }
 
-            let save_buttons = this.popup.getElementsByClassName("KOSHIAN_SaveButton");
-            if (save_buttons.length) {
+            let save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (save_button) {
                 //KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
-                save_buttons[0].className = "KOSHIAN_PopupSave";
+                save_button.className = "KOSHIAN_PopupSave";
             }
 
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
@@ -579,13 +587,13 @@ function onMouseUp(e) {
     let sel = window.getSelection();
     let sel_str = sel.toString();
     if (sel_str.length < search_selected_length ||
-        sel_str.match(/[\r\n]/) ||
+        sel_str.match(/\r|\n/) ||
         sel.rangeCount > 1) return;
     let sel_elm = sel.anchorNode;
     if (sel_elm.nodeName != "BLOCKQUOTE") {
         sel_elm = sel_elm.parentNode;
         // 選択場所がレス本文以外なら中止
-        if (!checkBlockquote(sel_elm)) return;
+        if (!isInsideBlockquote(sel_elm)) return;
     }
 
     let font_elm = document.createElement("font");
@@ -625,7 +633,7 @@ function onMouseUp(e) {
         try {
             sel_range.surroundContents(font_elm);
         } catch(e) {
-            console.log ("res.js: surround contents error: " + e);
+            console.error ("KOSHIAN_popup_quote/res.js - surround contents error: " + e);   // eslint-disable-line no-console
         }
     } finally {
         selected_elm = sel_elm.getElementsByClassName("KOSHIAN_selected_font")[0];
@@ -647,9 +655,13 @@ function onMouseUp(e) {
     }
 }
 
-function replaceText(element, class_name){
-    // element要素下のクラス名class_nameの要素をテキストノードに置換
-    // elementがnullの時は全てのclass_nameをテキストノードに置換
+/**
+ * 指定したクラス名をテキストノードに置換
+ * @param {Element} element 要素の子孫の指定クラス名をテキストノードに置換。
+ *     要素がnullのときはdocument全体の指定クラス名をテキストノードに置換
+ * @param {string} class_name テキストノードに置換されるクラス名
+ */
+function replaceText(element, class_name) {
     element = element ? element : document;
     let elements = element.getElementsByClassName(class_name);
     if (elements) {
@@ -663,8 +675,11 @@ function replaceText(element, class_name){
         }
     }
 
+    /**
+     * 子孫要素のテキストを含まないテキストを取得
+     * @param {Element}} element テキストを取得する要素
+     */
     function getText(element){
-        // 子要素のテキストを含まないelementのテキストを取得
         if (element.childNodes) {
             return element.childNodes[0].wholeText;
         }
@@ -672,17 +687,20 @@ function replaceText(element, class_name){
     }
 }
 
-function checkBlockquote(element){
-    // elementがblockquote内ならtrueを返す
-    for (element; element; element = element.parentNode) {
-        if (element.nodeName == "BLOCKQUOTE") return true;
-        if (element.className == "rtd" || element.className == "KOSHIAN_response") return false;
-    }
-    return false;
+/**
+ * 指定した要素がBlockquote内か
+ * @param {Element} element Blockquote内か確認する要素
+ */
+function isInsideBlockquote(element){
+    return element.closest("blockquote") !== null;
 }
 
-function moveToResponse(replyNo){
-    let input = replyNo.nextElementSibling;
+/**
+ * 指定したレス番号へスクロール
+ * @param {Element} replyNo_elm レス番号の要素
+ */
+function moveToResponse(replyNo_elm){
+    let input = replyNo_elm.nextElementSibling;
     if (input.nodeName == "INPUT" && input.id) {
         let target = document.getElementById(input.id);
         if (target) {

@@ -954,6 +954,10 @@ function moveToResponse(replyNo_elm){
         let target = document.getElementById(id);
         if (target) {
             target.scrollIntoView(true);
+            target.parentElement.style.backgroundColor = "#ffcc99";
+            setTimeout(() => {
+                target.parentElement.style.backgroundColor = "";
+            }, 2000);
         }
     }
 }

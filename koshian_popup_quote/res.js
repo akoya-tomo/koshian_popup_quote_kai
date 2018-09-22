@@ -89,7 +89,7 @@ class SearchTarget {
         let filename = "";
 
         if(search_resno){
-            let number_button = document.querySelector(".thre>.KOSHIAN_NumberButton");
+            let number_button = document.querySelector(".thre > .KOSHIAN_NumberButton");
             if (number_button) {
                 resno = number_button.textContent;
             } else {
@@ -168,7 +168,7 @@ class SearchTarget {
 let search_targets = [];
 
 /**
- * 引用
+ * 引用ポップアップ制御クラス
  * @param {HTMLFontElement} green_text 引用のFont要素
  * @param {number} index 引用のあるレスのレス番号（スレ内の通番）
  * @param {number} depth ポップアップの深さ
@@ -223,14 +223,14 @@ class Quote {
         this.green_text.addEventListener("mouseleave", (e) => {
             let related_target = e.relatedTarget;
             if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
-                document.addEventListener("click", documentClick, false);
+                document.addEventListener("click", hideQuotePopup, false);
                 return;
             }
             quote.mouseon = false;
             quote.hide(e);
             quote_mouse_down = false;
 
-            function documentClick(e) {
+            function hideQuotePopup(e) {
                 let e_target_closest = false;
                 for (let elm = e.target; elm; elm = elm.parentElement) {
                     if (elm == quote.green_text) {
@@ -246,7 +246,7 @@ class Quote {
                         quote.hide(e);
                         quote_mouse_down = false;
                     }
-                    document.removeEventListener("click", documentClick, false);
+                    document.removeEventListener("click", hideQuotePopup, false);
                 }
             }
         });
@@ -966,7 +966,7 @@ function safeGetValue(value, default_value) {
     return value === undefined ? default_value : value;
 }
 
-function onError(error) {
+function onError(error) {   // eslint-disable-line no-unused-vars
 
 }
 

@@ -9,11 +9,13 @@ const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_SEARCH_REPLY = true;
 const DEFAULT_POPUP_FONT_SIZE = 0;
 
+/* eslint indent: ["warn", 2] */
+
 function safeGetValue(value, default_value) {
   return value === undefined ? default_value : value;
 }
 
-function onError(error) {
+function onError(error) { // eslint-disable-line no-unused-vars
 }
 
 function saveOptions(e) {

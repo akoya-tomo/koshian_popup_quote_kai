@@ -7,6 +7,7 @@ const DEFAULT_POPUP_NEAR = false;
 const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_SEARCH_REPLY = true;
+const DEFAULT_POPUP_FONT_SIZE = 0;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
@@ -21,6 +22,7 @@ let popup_near = DEFAULT_POPUP_NEAR;
 let popup_perfect = DEFAULT_POPUP_PERFECT;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let search_reply = DEFAULT_SEARCH_REPLY;
+let popup_font_size = DEFAULT_POPUP_FONT_SIZE;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
 let g_response_list = [];
@@ -327,6 +329,11 @@ class Quote {
         this.popup.style.maxWidth = "initial";
         // ポップアップの最小幅を追加（ポップアップサイズの維持）
         this.popup.style.minWidth = "480px";
+        if (popup_font_size) {
+            this.popup.style.fontSize = `${popup_font_size}px`;
+        } else {
+            this.popup.style.fontSize = "";
+        }
         this.green_text.appendChild(this.popup);
     }
 
@@ -365,6 +372,11 @@ class Quote {
         this.popup.style.maxWidth = "initial";
         // ポップアップの最小幅を追加（ポップアップサイズの維持）
         this.popup.style.minWidth = "480px";
+        if (popup_font_size) {
+            this.popup.style.fontSize = `${popup_font_size}px`;
+        } else {
+            this.popup.style.fontSize = "";
+        }
         this.green_text.appendChild(this.popup);
 
         let font_elem_list = this.popup.getElementsByTagName("blockquote")[0].getElementsByTagName("font");
@@ -606,6 +618,11 @@ class Reply {
         this.popup.style.zIndex = 1;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
+        if (popup_font_size) {
+            this.popup.style.fontSize = `${popup_font_size}px`;
+        } else {
+            this.popup.style.fontSize = "";
+        }
         this.green_text.appendChild(this.popup);
 
     }
@@ -959,6 +976,7 @@ function onLoadSetting(result) {
     popup_perfect = safeGetValue(result.popup_perfect, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
     search_reply = safeGetValue(result.search_reply, DEFAULT_SEARCH_REPLY);
+    popup_font_size = Number(safeGetValue(result.popup_font_size, DEFAULT_POPUP_FONT_SIZE));
 
     main();
 }
@@ -977,6 +995,7 @@ function onSettingChanged(changes, areaName) {
     popup_perfect = safeGetValue(changes.popup_perfect.newValue, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
     search_reply = safeGetValue(changes.search_reply.newValue, DEFAULT_SEARCH_REPLY);
+    popup_font_size = Number(safeGetValue(changes.popup_font_size.newValue, DEFAULT_POPUP_FONT_SIZE));
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

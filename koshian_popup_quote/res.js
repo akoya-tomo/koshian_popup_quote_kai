@@ -6,10 +6,13 @@ const DEFAULT_POPUP_TODOWN = false;
 const DEFAULT_POPUP_NEAR = false;
 const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
+const DEFAULT_SEARCH_REPLY = true;
+const DEFAULT_POPUP_FONT_SIZE = 0;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
+const REPLY_COLOR = "#789922";
 let search_resno = DEFAULT_SEARCH_RESNO;
 let search_file = DEFAULT_SEARCH_FILE;
 let popup_time = DEFAULT_POPUP_TIME;
@@ -18,6 +21,8 @@ let popup_todown = DEFAULT_POPUP_TODOWN;
 let popup_near = DEFAULT_POPUP_NEAR;
 let popup_perfect = DEFAULT_POPUP_PERFECT;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
+let search_reply = DEFAULT_SEARCH_REPLY;
+let popup_font_size = DEFAULT_POPUP_FONT_SIZE;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
 let g_response_list = [];
@@ -26,6 +31,8 @@ let selected_elm;
 let selected_depth = 0;
 let selected_parent_list = [null];
 let quote_mouse_down = false;
+let have_sod = false;
+let have_del = false;
 
 const SEARCH_RESULT_PERFECT = 0;
 const SEARCH_RESULT_MAYBE = 1;
@@ -82,7 +89,7 @@ class SearchTarget {
         let filename = "";
 
         if(search_resno){
-            let number_button = document.querySelector(".thre>.KOSHIAN_NumberButton");
+            let number_button = document.querySelector(".thre > .KOSHIAN_NumberButton");
             if (number_button) {
                 resno = number_button.textContent;
             } else {
@@ -161,7 +168,7 @@ class SearchTarget {
 let search_targets = [];
 
 /**
- * 引用
+ * 引用ポップアップ制御クラス
  * @param {HTMLFontElement} green_text 引用のFont要素
  * @param {number} index 引用のあるレスのレス番号（スレ内の通番）
  * @param {number} depth ポップアップの深さ
@@ -216,14 +223,14 @@ class Quote {
         this.green_text.addEventListener("mouseleave", (e) => {
             let related_target = e.relatedTarget;
             if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
-                document.addEventListener("click", documentClick, false);
+                document.addEventListener("click", hideQuotePopup, false);
                 return;
             }
             quote.mouseon = false;
             quote.hide(e);
             quote_mouse_down = false;
 
-            function documentClick(e) {
+            function hideQuotePopup(e) {
                 let e_target_closest = false;
                 for (let elm = e.target; elm; elm = elm.parentElement) {
                     if (elm == quote.green_text) {
@@ -239,7 +246,7 @@ class Quote {
                         quote.hide(e);
                         quote_mouse_down = false;
                     }
-                    document.removeEventListener("click", documentClick, false);
+                    document.removeEventListener("click", hideQuotePopup, false);
                 }
             }
         });
@@ -256,7 +263,7 @@ class Quote {
         });
     }
 
-    findOriginIndex() {
+    findOriginIndex(is_reply) {
         let search_text = this.green_text.innerText;
         if (this.is_selected) {
             // 文字列選択ポップアップを前面にする
@@ -279,7 +286,7 @@ class Quote {
 
             let result = target.searchText(search_text);
             if(result == SEARCH_RESULT_PERFECT){
-                if(popup_perfect){
+                if(popup_perfect || is_reply){
                     return target.index;
                 }else{
                     origin_kouho.push(target.index);
@@ -289,7 +296,7 @@ class Quote {
             }
         }
 
-        if (origin_kouho.length > 0) {
+        if (origin_kouho.length > 0 && !is_reply) {
             if (popup_near) {
                 return origin_kouho[0];
             } else {
@@ -322,6 +329,11 @@ class Quote {
         this.popup.style.maxWidth = "initial";
         // ポップアップの最小幅を追加（ポップアップサイズの維持）
         this.popup.style.minWidth = "480px";
+        if (popup_font_size) {
+            this.popup.style.fontSize = `${popup_font_size}px`;
+        } else {
+            this.popup.style.fontSize = "";
+        }
         this.green_text.appendChild(this.popup);
     }
 
@@ -360,6 +372,11 @@ class Quote {
         this.popup.style.maxWidth = "initial";
         // ポップアップの最小幅を追加（ポップアップサイズの維持）
         this.popup.style.minWidth = "480px";
+        if (popup_font_size) {
+            this.popup.style.fontSize = `${popup_font_size}px`;
+        } else {
+            this.popup.style.fontSize = "";
+        }
         this.green_text.appendChild(this.popup);
 
         let font_elem_list = this.popup.getElementsByTagName("blockquote")[0].getElementsByTagName("font");
@@ -448,13 +465,15 @@ class Quote {
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
                 // KOSHIAN NG 改の[隠す]ボタンのclassを書換
-                hide_button.className = "KOSHIAN_PopupHide";
+                //hide_button.className = "KOSHIAN_PopupHide";
+                hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
                 // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
-                ng_switch.className = "KOSHIAN_PopupNG";
+                //ng_switch.className = "KOSHIAN_PopupNG";
+                ng_switch.remove();
             }
 
             let save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
@@ -500,7 +519,177 @@ class Quote {
     }
 }
 
-function putIndex(rtd, index){
+/**
+ * 返信レス番号ポップアップ制御クラス
+ * @param {HTMLSpanElement} green_text 返信番号のSpan要素
+ * @param {number} index 返信レスのレス番号（スレ内の通番）
+ * @constructor  
+ */
+class Reply {
+    constructor (green_text, index) {
+        this.green_text = green_text;
+        this.index = index;
+        this.popup = null;
+        this.mouseon = false;
+        this.timer = false;
+
+        let reply = this;
+
+        this.green_text.addEventListener("mouseenter", (e) => {
+            if (reply.mouseon) return;
+            reply.mouseon = true;
+
+            if (!reply.timer) {
+                setTimeout(() => {
+                    reply.timer = false;
+
+                    if (reply.mouseon) {
+                        reply.show(e);
+                    }
+                }, popup_time);
+
+                reply.timer = true;
+            }
+        });
+
+        this.green_text.addEventListener("mouseleave", (e) => {
+            let related_target = e.relatedTarget;
+            if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
+                document.addEventListener("click", hideReplyPopup, false);
+                return;
+            }
+            reply.mouseon = false;
+            reply.hide();
+
+            function hideReplyPopup(e) {
+                let e_target_closest = false;
+                for (let elm = e.target; elm; elm = elm.parentElement) {
+                    if (elm == reply.green_text) {
+                        e_target_closest = true;
+                    }
+                }
+                if (e.target !== null &&
+                    e.target.className != "KOSHIAN_QuoteMenuItem" &&
+                    e.target.className != "KOSHIAN_QuoteMenuText" &&
+                    !e_target_closest) {
+                    if (reply.mouseon) {
+                        reply.mouseon = false;
+                        reply.hide();
+                    }
+                    document.removeEventListener("click", hideReplyPopup, false);
+                }
+            }
+        });
+    }
+
+    createPopup() {
+        this.popup = document.createElement("div");
+
+        // div要素を作りたいのでrd要素のクローンじゃだめ
+        // g_response_listは最初のスレを含まないので-1
+        for (let ch = g_response_list[this.index - 1].firstChild; ch != null; ch = ch.nextSibling) {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+                let anchor = document.createElement("a");
+                anchor.href = "javascript:void(0);";
+                anchor.className = "KOSHIAN_reply_no";
+                anchor.title = "このレスに移動";
+                anchor.innerText = ch.innerText;
+                anchor.addEventListener("click", () => {
+                    this.mouseon = false;
+                    this.hide();
+                    moveToResponse(ch);
+                }, false);
+                this.popup.appendChild(anchor);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "INPUT" && ch.id) {
+                let clone = ch.cloneNode(true);
+                clone.id = ch.id + "_";
+                this.popup.appendChild(clone);
+            } else {
+                this.popup.appendChild(ch.cloneNode(true));
+            }
+        }
+
+        this.popup.className = "KOSHIAN_response";
+        this.popup.style.position = "absolute";
+        this.popup.style.display = "block";
+        this.popup.style.color = TEXT_COLOR;
+        this.popup.style.backgroundColor = BG_COLOR;
+        this.popup.style.border = "solid 1px";
+        this.popup.style.zIndex = 1;
+        this.popup.style.width = "auto";
+        this.popup.style.maxWidth = "initial";
+        if (popup_font_size) {
+            this.popup.style.fontSize = `${popup_font_size}px`;
+        } else {
+            this.popup.style.fontSize = "";
+        }
+        this.green_text.appendChild(this.popup);
+
+    }
+
+    show(e) {
+        this.createPopup();
+
+        if (this.popup) {
+            let rc = Reply.getPopupPosition(e.clientX, e.clientY, this.green_text);
+
+            this.popup.style.top = `${rc.top + rc.height - 2}px`;
+            this.popup.style.left = `${rc.left + popup_indent}px`;
+            this.popup.style.display = "block";
+
+            let number_button = this.popup.getElementsByClassName("KOSHIAN_NumberButton")[0];
+            if (number_button) {
+                // KOSHIAN 引用メニュー 改のNo.ボタンのclassを書換
+                number_button.className = "KOSHIAN_PopupNumber";
+            }
+
+            let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
+            if (hide_button) {
+                // KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                //hide_button.className = "KOSHIAN_PopupHide";
+                hide_button.remove();
+            }
+
+            let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+            if (ng_switch) {
+                // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                //ng_switch.className = "KOSHIAN_PopupNG";
+                ng_switch.remove();
+            }
+
+            let save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (save_button) {
+                // KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
+                save_button.className = "KOSHIAN_PopupSave";
+            }
+
+            document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
+        }
+    }
+
+    hide() {
+        if (this.popup) {
+            this.popup.remove();
+        }
+    }
+
+    static getPopupPosition(mouse_client_x, mouse_client_y, elem) {
+        let rc = {};
+
+        let clientH = document.documentElement.clientHeight;
+        let elem_position = elem.getBoundingClientRect();
+
+        rc.left = (elem_position.left + document.documentElement.scrollLeft);
+        rc.top = clientH - (elem_position.bottom + document.documentElement.scrollTop); // elemの下辺をtopにする
+        rc.width = elem.width;
+        rc.height = elem.height;
+
+        return rc;
+    }
+
+}
+
+function putIndex(rtd, index) {
     if (rtd.firstElementChild.className != "KOSHIAN_reply_no") {
         let reply = document.createElement("span");
         reply.className = "KOSHIAN_reply_no";
@@ -511,12 +700,61 @@ function putIndex(rtd, index){
     }
 }
 
-function createPopup(rtd, index){
-    for(let i = 0,font_elements = rtd.getElementsByTagName("font"); i < font_elements.length; ++i){
-        if(font_elements[i].color == QUOTE_COLOR){
-            new Quote(font_elements[i], index, 0, null);
+function createPopup(rtd, index) {
+    if (search_reply) {
+        let previous_index = -1;
+        for (let i = 0, font_elements = rtd.getElementsByTagName("font"); i < font_elements.length; ++i) {
+            if (font_elements[i].color == QUOTE_COLOR) {
+                let quote = new Quote(font_elements[i], index, 0, null);
+                let origin_index = quote.findOriginIndex(true);
+                if (origin_index > -1 && origin_index != previous_index) {
+                    putReplyNo(origin_index, index);
+                    previous_index = origin_index;
+                }
+            }
+        }
+    } else {
+        for(let i = 0,font_elements = rtd.getElementsByTagName("font"); i < font_elements.length; ++i){
+            if(font_elements[i].color == QUOTE_COLOR){
+                new Quote(font_elements[i], index, 0, null);
+            }
         }
     }
+}
+
+function putReplyNo(origin_index, index) {
+    let reply_no = document.createElement("span");
+    reply_no.className = "KOSHIAN_ReplyNo";
+    reply_no.textContent = `>>${index}`;
+    reply_no.style.color = REPLY_COLOR;
+
+    let response, reply_no_list, ng_button;
+    if (origin_index) {
+        // レス
+        response = g_response_list[origin_index - 1];
+        reply_no_list = response.getElementsByClassName("KOSHIAN_ReplyNo");
+        ng_button = response.getElementsByClassName("KOSHIAN_HideButton")[0] || response.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+    } else {
+        // スレ
+        response = g_thre;
+        reply_no_list = document.querySelectorAll(".thre > .KOSHIAN_ReplyNo");
+        ng_button = null;
+    }
+    let target;
+    if (reply_no_list.length) {
+        target = reply_no_list[reply_no_list.length - 1].nextSibling;
+    } else if (ng_button) {
+        target = ng_button.nextSibling;
+    } else if (have_sod) {
+        target = response.getElementsByClassName("sod")[0].nextSibling;
+    } else if (have_del) {
+        target = response.getElementsByClassName("del")[0].nextSibling;
+    } else {
+        target = response.getElementsByTagName("blockquote")[0];
+    }
+    response.insertBefore(reply_no, target);
+    response.insertBefore(document.createTextNode(" "), reply_no);
+    new Reply(reply_no, index);
 }
 
 function process(beg, end){
@@ -541,8 +779,15 @@ function main() {
     if (g_thre == null) {
         return;
     }
-    
+
+    let reply_no_list = g_thre.getElementsByClassName("KOSHIAN_ReplyNo");
+    while (reply_no_list.length) {
+        reply_no_list[0].remove();
+    }
+
     g_response_list = g_thre.getElementsByClassName("rtd");
+    have_sod = document.getElementsByClassName("sod").length > 0;
+    have_del = document.getElementsByClassName("del").length > 0;
 
     // add search targets by thre
     search_targets.push(SearchTarget.createByThre(g_thre));
@@ -702,9 +947,17 @@ function isInsideBlockquote(element){
 function moveToResponse(replyNo_elm){
     let input = replyNo_elm.nextElementSibling;
     if (input.nodeName == "INPUT" && input.id) {
-        let target = document.getElementById(input.id);
+        let id = input.id;
+        if (id.slice(-1) == "_") {
+            id = input.id.slice(0, -1);
+        }
+        let target = document.getElementById(id);
         if (target) {
             target.scrollIntoView(true);
+            target.parentElement.style.backgroundColor = "#ffcc99";
+            setTimeout(() => {
+                target.parentElement.style.backgroundColor = "";
+            }, 2000);
         }
     }
 }
@@ -713,7 +966,7 @@ function safeGetValue(value, default_value) {
     return value === undefined ? default_value : value;
 }
 
-function onError(error) {
+function onError(error) {   // eslint-disable-line no-unused-vars
 
 }
 
@@ -726,6 +979,8 @@ function onLoadSetting(result) {
     popup_near = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);
     popup_perfect = safeGetValue(result.popup_perfect, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
+    search_reply = safeGetValue(result.search_reply, DEFAULT_SEARCH_REPLY);
+    popup_font_size = Number(safeGetValue(result.popup_font_size, DEFAULT_POPUP_FONT_SIZE));
 
     main();
 }
@@ -743,6 +998,8 @@ function onSettingChanged(changes, areaName) {
     popup_near = safeGetValue(changes.popup_near.newValue, DEFAULT_POPUP_NEAR);
     popup_perfect = safeGetValue(changes.popup_perfect.newValue, DEFAULT_POPUP_PERFECT);
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
+    search_reply = safeGetValue(changes.search_reply.newValue, DEFAULT_SEARCH_REPLY);
+    popup_font_size = Number(safeGetValue(changes.popup_font_size.newValue, DEFAULT_POPUP_FONT_SIZE));
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

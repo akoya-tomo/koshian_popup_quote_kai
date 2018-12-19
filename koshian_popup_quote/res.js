@@ -271,6 +271,8 @@ class Quote {
         } else {
             search_text = search_text.slice(1).replace(/^[\s]+|[\s]+$/g, "");
         }
+        if (!search_text.length) return -1;
+
         let origin_kouho = [];
 
         for (let i = this.index - 1; i >= 0; --i) {

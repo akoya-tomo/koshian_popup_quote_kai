@@ -33,7 +33,7 @@
 
 ## インストール
 **GitHub**  
-[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.7.1/koshian_popup_quote_kai-1.7.1-fx.xpi)  
+[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.7.2/koshian_popup_quote_kai-1.7.2-fx.xpi)  
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -71,6 +71,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.7.2 2019-04-13
+  - 引用が複数行あるときの引用元レスの探索精度を改善
 * v1.7.1 2018-12-20
   - 改行だけの引用があると引用ポップアップや返信ポップアップが正常に表示されない不具合を修正
 * v1.7.0 2018-09-22  

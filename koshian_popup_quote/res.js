@@ -263,7 +263,7 @@ class Quote {
         });
     }
 
-    findOriginIndex(is_reply) {
+    findOriginIndex(is_reply, target_index = -1) {
         let search_text = this.green_text.innerText;
         if (this.is_selected) {
             // 文字列選択ポップアップを前面にする
@@ -275,8 +275,8 @@ class Quote {
 
         let origin_kouho = [];
 
-        for (let i = this.index - 1; i >= 0; --i) {
-            let target = search_targets[i];
+        if (is_reply && target_index > -1) {
+            let target = search_targets[target_index];
 
             if(search_resno && target.searchResNo(search_text)){
                 return target.index;
@@ -288,13 +288,31 @@ class Quote {
 
             let result = target.searchText(search_text);
             if(result == SEARCH_RESULT_PERFECT){
-                if(popup_perfect || is_reply){
+                return target.index;
+            }
+
+        } else {
+            for (let i = this.index - 1; i >= 0; --i) {
+                let target = search_targets[i];
+
+                if(search_resno && target.searchResNo(search_text)){
                     return target.index;
-                }else{
+                }
+
+                if(search_file && target.searchFileName(search_text)){
+                    return target.index;
+                }
+
+                let result = target.searchText(search_text);
+                if(result == SEARCH_RESULT_PERFECT){
+                    if(popup_perfect || is_reply){
+                        return target.index;
+                    }else{
+                        origin_kouho.push(target.index);
+                    }
+                }else if(result == SEARCH_RESULT_MAYBE){
                     origin_kouho.push(target.index);
                 }
-            }else if(result == SEARCH_RESULT_MAYBE){
-                origin_kouho.push(target.index);
             }
         }
 
@@ -704,14 +722,20 @@ function putIndex(rtd, index) {
 
 function createPopup(rtd, index) {
     if (search_reply) {
-        let previous_index = -1;
+        let previous_index = -1, previous_quote = null;
         for (let i = 0, font_elements = rtd.getElementsByTagName("font"); i < font_elements.length; ++i) {
             if (font_elements[i].color == QUOTE_COLOR) {
                 let quote = new Quote(font_elements[i], index, 0, null);
                 let origin_index = quote.findOriginIndex(true);
                 if (origin_index > -1 && origin_index != previous_index) {
                     putReplyNo(origin_index, index);
+                    if (previous_index > -1) {
+                        // 引用元に前回探索した引用の引用元が存在したときは前回設置した返信No.を削除する
+                        let previous_quote_index = previous_quote.findOriginIndex(true, origin_index);
+                        if (previous_quote_index > -1) removeReplyNo(previous_index);
+                    }
                     previous_index = origin_index;
+                    previous_quote = quote;
                 }
             }
         }
@@ -757,6 +781,24 @@ function putReplyNo(origin_index, index) {
     response.insertBefore(reply_no, target);
     response.insertBefore(document.createTextNode(" "), reply_no);
     new Reply(reply_no, index);
+}
+
+function removeReplyNo(index) {
+    let response, reply_no_list;
+    if (index) {
+        // レス
+        response = g_response_list[index - 1];
+        reply_no_list = response.getElementsByClassName("KOSHIAN_ReplyNo");
+    } else {
+        // スレ
+        response = g_thre;
+        reply_no_list = document.querySelectorAll(".thre > .KOSHIAN_ReplyNo");
+    }
+    if (reply_no_list.length) {
+        let target = reply_no_list[reply_no_list.length - 1];
+        response.removeChild(target.previousSibling);   // 空白テキスト
+        response.removeChild(target);
+    }
 }
 
 function process(beg, end){

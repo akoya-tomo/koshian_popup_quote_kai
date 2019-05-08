@@ -848,6 +848,35 @@ function main() {
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
 
+    let contdisp = document.getElementById("contdisp");
+    if (contdisp) {
+        check2chanReload(contdisp);
+    }
+
+    function check2chanReload(target) {
+        let status = "";
+        let reloading = false;
+        let config = { childList: true };
+        let observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (target.textContent == status) return;
+                status = target.textContent;
+                if (status == "・・・") {
+                    reloading = true;
+                } else
+                if (reloading && status.endsWith("頃消えます")) {
+                    let prev_res_num = g_last_response_num;
+                    let cur_res_num = g_response_list.length;
+                    process(prev_res_num, cur_res_num);
+                    g_last_response_num = cur_res_num;
+                    reloading = false;
+                } else {
+                    reloading = false;
+                }
+            });
+        });
+        observer.observe(target, config);
+    }
 }
 
 function onMouseDown(e) {

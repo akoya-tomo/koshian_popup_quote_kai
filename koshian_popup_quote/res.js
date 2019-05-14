@@ -654,8 +654,23 @@ class Reply {
             let rc = Reply.getPopupPosition(e.clientX, e.clientY, this.green_text);
 
             this.popup.style.top = `${rc.top + rc.height - 2}px`;
-            this.popup.style.left = `${rc.left + popup_indent}px`;
+            this.popup.style.left = "0px";
+            this.popup.style.right = "";
             this.popup.style.display = "block";
+
+            let popup = this.popup.getBoundingClientRect();
+            let window_right = document.documentElement.clientWidth + document.documentElement.scrollLeft;
+            let popup_left = rc.left + popup_indent;
+            if (popup_left + popup.width > window_right) {
+                if (window_right - popup.width >= 0) {
+                    this.popup.style.left = "";
+                    this.popup.style.right = "0px";
+                } else {
+                    this.popup.style.left = `0px`;
+                }
+            } else {
+                this.popup.style.left = `${popup_left}px`;
+            }
 
             let number_button = this.popup.getElementsByClassName("KOSHIAN_NumberButton")[0];
             if (number_button) {

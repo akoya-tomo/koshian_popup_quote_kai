@@ -349,15 +349,16 @@ class Quote {
         this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
-        // ポップアップの最小幅を追加（ポップアップサイズの維持）
-        this.popup.style.minWidth = "480px";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
         } else {
             this.popup.style.fontSize = "";
         }
-        this.green_text.appendChild(this.popup);
-        // サムネ画像倍率を反映
+
+        // ポップアップの表示幅を測定
+        document.body.appendChild(this.popup);  // bodyの直下に配置して幅を測定
+        this.popup.style.left = "0px";
+        // 測定前にサムネ画像倍率を反映
         let popup_imgs = this.popup.getElementsByTagName("img");
         if (popup_imgs.length) {
             for (let popup_img of popup_imgs) {
@@ -374,6 +375,11 @@ class Quote {
                 }
             }
         }
+        let popup_rect = this.popup.getBoundingClientRect();
+        this.popup.style.minWidth = `${popup_rect.width}px`;    // 本来の表示幅より狭くならないように最小幅を設定
+        this.popup.remove();
+        this.green_text.appendChild(this.popup);
+
     }
 
     createPopupResponse() {
@@ -409,15 +415,16 @@ class Quote {
         this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
-        // ポップアップの最小幅を追加（ポップアップサイズの維持）
-        this.popup.style.minWidth = "480px";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
         } else {
             this.popup.style.fontSize = "";
         }
-        this.green_text.appendChild(this.popup);
-        // サムネ画像倍率を反映
+
+        // ポップアップの表示幅を測定
+        document.body.appendChild(this.popup);  // bodyの直下に配置して幅を測定
+        this.popup.style.left = "0px";
+        // 測定前にサムネ画像倍率を反映
         let popup_imgs = this.popup.getElementsByTagName("img");
         if (popup_imgs.length) {
             for (let popup_img of popup_imgs) {
@@ -434,6 +441,10 @@ class Quote {
                 }
             }
         }
+        let popup_rect = this.popup.getBoundingClientRect();
+        this.popup.style.minWidth = `${popup_rect.width}px`;    // 本来の表示幅より狭くならないように最小幅を設定
+        this.popup.remove();
+        this.green_text.appendChild(this.popup);
 
         let font_elem_list = this.popup.getElementsByTagName("blockquote")[0].getElementsByTagName("font");
         for (let i = 0; i < font_elem_list.length; ++i) {
@@ -694,7 +705,7 @@ class Reply {
             this.popup.style.right = "";
             this.popup.style.display = "block";
 
-            // サムネ画像倍率を反映
+            // 測定前にサムネ画像倍率を反映
             let popup_imgs = this.popup.getElementsByTagName("img");
             if (popup_imgs.length) {
                 for (let popup_img of popup_imgs) {

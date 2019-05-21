@@ -275,7 +275,8 @@ class Quote {
         }
         if (!search_text.length) return -1;
 
-        let origin_kouho = [];
+        let origin = [];    // 行単位で一致
+        let origin_kouho = [];  // 部分一致
 
         if (is_reply && target_index > -1) {
             let target = search_targets[target_index];
@@ -307,8 +308,11 @@ class Quote {
 
                 let result = target.searchText(search_text);
                 if(result == SEARCH_RESULT_PERFECT){
-                    if(popup_perfect || is_reply){
+                    if((popup_perfect && popup_near) || is_reply){
                         return target.index;
+                    }else
+                    if(popup_perfect){
+                        origin.push(target.index);
                     }else{
                         origin_kouho.push(target.index);
                     }
@@ -318,6 +322,9 @@ class Quote {
             }
         }
 
+        if (origin.length > 0) {
+            return origin[origin.length - 1];
+        }
         if (origin_kouho.length > 0 && !is_reply) {
             if (popup_near) {
                 return origin_kouho[0];

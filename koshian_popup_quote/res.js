@@ -224,7 +224,9 @@ class Quote {
 
         this.green_text.addEventListener("mouseleave", (e) => {
             let related_target = e.relatedTarget;
-            if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
+            if (related_target === null
+                || related_target.className == "KOSHIAN_QuoteMenuItem"
+                || related_target.className == "KOSHIAN_QuoteMenuText") {
                 document.addEventListener("click", hideQuotePopup, false);
                 return;
             }
@@ -239,10 +241,10 @@ class Quote {
                         e_target_closest = true;
                     }
                 }
-                if (e.target !== null &&
-                    e.target.className != "KOSHIAN_QuoteMenuItem" &&
-                    e.target.className != "KOSHIAN_QuoteMenuText" &&
-                    !e_target_closest) {
+                if (e.target !== null
+                    && e.target.className != "KOSHIAN_QuoteMenuItem"
+                    && e.target.className != "KOSHIAN_QuoteMenuText"
+                    && !e_target_closest) {
                     if (quote.mouseon) {
                         quote.mouseon = false;
                         quote.hide(e);
@@ -531,6 +533,7 @@ class Quote {
                 }
                 this.popup.style.display = "block";
             }
+
             if (selected_elm) {
                 let sel = window.getSelection();
                 if (sel.toString().length) {
@@ -554,14 +557,14 @@ class Quote {
 
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
-                // KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                // KOSHIAN NG 改の[隠す]ボタンを削除
                 //hide_button.className = "KOSHIAN_PopupHide";
                 hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
-                // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 //ng_switch.className = "KOSHIAN_PopupNG";
                 ng_switch.remove();
             }
@@ -754,11 +757,11 @@ class Reply {
                 }
             }
 
-            let popup = this.popup.getBoundingClientRect();
+            let popup_rect = this.popup.getBoundingClientRect();
             let window_right = document.documentElement.clientWidth + document.documentElement.scrollLeft;
             let popup_left = rc.left + popup_indent;
-            if (popup_left + popup.width > window_right) {
-                if (window_right - popup.width >= 0) {
+            if (popup_left + popup_rect.width > window_right) {
+                if (window_right - popup_rect.width >= 0) {
                     this.popup.style.left = "";
                     this.popup.style.right = "0px";
                 } else {
@@ -776,14 +779,14 @@ class Reply {
 
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
-                // KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                // KOSHIAN NG 改の[隠す]ボタンを削除
                 //hide_button.className = "KOSHIAN_PopupHide";
                 hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
-                // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 //ng_switch.className = "KOSHIAN_PopupNG";
                 ng_switch.remove();
             }

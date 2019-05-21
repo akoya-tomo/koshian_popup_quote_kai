@@ -358,6 +358,14 @@ class Quote {
         this.popup.style.maxWidth = "initial";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
+            // ポップアップ内のKOSHIAN画像保存ボタンにフォントサイズを再設定
+            let image_save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (image_save_button && image_save_button.style.fontSize) {
+                let button_font_size = parseInt(image_save_button.style.fontSize, 10);
+                if (button_font_size > popup_font_size) {
+                    image_save_button.style.fontSize = `${popup_font_size}px`;
+                }
+            }
         } else {
             this.popup.style.fontSize = "";
         }
@@ -424,6 +432,14 @@ class Quote {
         this.popup.style.maxWidth = "initial";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
+            // ポップアップ内のKOSHIAN画像保存ボタンにフォントサイズを再設定
+            let image_save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (image_save_button && image_save_button.style.fontSize) {
+                let button_font_size = parseInt(image_save_button.style.fontSize, 10);
+                if (button_font_size > popup_font_size) {
+                    image_save_button.style.fontSize = `${popup_font_size}px`;
+                }
+            }
         } else {
             this.popup.style.fontSize = "";
         }
@@ -694,6 +710,14 @@ class Reply {
         this.popup.style.maxWidth = "initial";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
+            // ポップアップ内のKOSHIAN画像保存ボタンにフォントサイズを再設定
+            let image_save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (image_save_button && image_save_button.style.fontSize) {
+                let button_font_size = parseInt(image_save_button.style.fontSize, 10);
+                if (button_font_size > popup_font_size) {
+                    image_save_button.style.fontSize = `${popup_font_size}px`;
+                }
+            }
         } else {
             this.popup.style.fontSize = "";
         }

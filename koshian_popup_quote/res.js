@@ -8,6 +8,7 @@ const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_SEARCH_REPLY = true;
 const DEFAULT_POPUP_FONT_SIZE = 0;
+const DEFAULT_POPUP_IMG_SCALE = 100;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
@@ -23,6 +24,7 @@ let popup_perfect = DEFAULT_POPUP_PERFECT;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let search_reply = DEFAULT_SEARCH_REPLY;
 let popup_font_size = DEFAULT_POPUP_FONT_SIZE;
+let popup_img_scale = DEFAULT_POPUP_IMG_SCALE;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
 let g_response_list = [];
@@ -222,7 +224,9 @@ class Quote {
 
         this.green_text.addEventListener("mouseleave", (e) => {
             let related_target = e.relatedTarget;
-            if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
+            if (related_target === null
+                || related_target.className == "KOSHIAN_QuoteMenuItem"
+                || related_target.className == "KOSHIAN_QuoteMenuText") {
                 document.addEventListener("click", hideQuotePopup, false);
                 return;
             }
@@ -237,10 +241,10 @@ class Quote {
                         e_target_closest = true;
                     }
                 }
-                if (e.target !== null &&
-                    e.target.className != "KOSHIAN_QuoteMenuItem" &&
-                    e.target.className != "KOSHIAN_QuoteMenuText" &&
-                    !e_target_closest) {
+                if (e.target !== null
+                    && e.target.className != "KOSHIAN_QuoteMenuItem"
+                    && e.target.className != "KOSHIAN_QuoteMenuText"
+                    && !e_target_closest) {
                     if (quote.mouseon) {
                         quote.mouseon = false;
                         quote.hide(e);
@@ -273,7 +277,8 @@ class Quote {
         }
         if (!search_text.length) return -1;
 
-        let origin_kouho = [];
+        let origin = [];    // 行単位で一致
+        let origin_kouho = [];  // 部分一致
 
         if (is_reply && target_index > -1) {
             let target = search_targets[target_index];
@@ -305,8 +310,11 @@ class Quote {
 
                 let result = target.searchText(search_text);
                 if(result == SEARCH_RESULT_PERFECT){
-                    if(popup_perfect || is_reply){
+                    if((popup_perfect && popup_near) || is_reply){
                         return target.index;
+                    }else
+                    if(popup_perfect){
+                        origin.push(target.index);
                     }else{
                         origin_kouho.push(target.index);
                     }
@@ -316,6 +324,9 @@ class Quote {
             }
         }
 
+        if (origin.length > 0) {
+            return origin[origin.length - 1];
+        }
         if (origin_kouho.length > 0 && !is_reply) {
             if (popup_near) {
                 return origin_kouho[0];
@@ -347,14 +358,45 @@ class Quote {
         this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
-        // ポップアップの最小幅を追加（ポップアップサイズの維持）
-        this.popup.style.minWidth = "480px";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
+            // ポップアップ内のKOSHIAN画像保存ボタンにフォントサイズを再設定
+            let image_save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (image_save_button && image_save_button.style.fontSize) {
+                let button_font_size = parseInt(image_save_button.style.fontSize, 10);
+                if (button_font_size > popup_font_size) {
+                    image_save_button.style.fontSize = `${popup_font_size}px`;
+                }
+            }
         } else {
             this.popup.style.fontSize = "";
         }
+
+        // ポップアップの表示幅を測定
+        document.body.appendChild(this.popup);  // bodyの直下に配置して幅を測定
+        this.popup.style.left = "0px";
+        // 測定前にサムネ画像倍率を反映
+        let popup_imgs = this.popup.getElementsByTagName("img");
+        if (popup_imgs.length) {
+            for (let popup_img of popup_imgs) {
+                let popup_img_rect = popup_img.getBoundingClientRect();
+                popup_img.width = popup_img_rect.width * popup_img_scale / 100;
+                popup_img.height = popup_img_rect.height * popup_img_scale / 100;
+                let blockquote = popup_img.parentNode.nextElementSibling;
+                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                    let margin_left = blockquote.style.marginLeft;
+                    if (margin_left) {
+                        // コメントの左マージンをサムネ画像倍率に合わせる
+                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
+                    }
+                }
+            }
+        }
+        let popup_rect = this.popup.getBoundingClientRect();
+        this.popup.style.minWidth = `${popup_rect.width}px`;    // 本来の表示幅より狭くならないように最小幅を設定
+        this.popup.remove();
         this.green_text.appendChild(this.popup);
+
     }
 
     createPopupResponse() {
@@ -390,13 +432,43 @@ class Quote {
         this.popup.style.zIndex = this.zIndex;
         this.popup.style.width = "auto";
         this.popup.style.maxWidth = "initial";
-        // ポップアップの最小幅を追加（ポップアップサイズの維持）
-        this.popup.style.minWidth = "480px";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
+            // ポップアップ内のKOSHIAN画像保存ボタンにフォントサイズを再設定
+            let image_save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (image_save_button && image_save_button.style.fontSize) {
+                let button_font_size = parseInt(image_save_button.style.fontSize, 10);
+                if (button_font_size > popup_font_size) {
+                    image_save_button.style.fontSize = `${popup_font_size}px`;
+                }
+            }
         } else {
             this.popup.style.fontSize = "";
         }
+
+        // ポップアップの表示幅を測定
+        document.body.appendChild(this.popup);  // bodyの直下に配置して幅を測定
+        this.popup.style.left = "0px";
+        // 測定前にサムネ画像倍率を反映
+        let popup_imgs = this.popup.getElementsByTagName("img");
+        if (popup_imgs.length) {
+            for (let popup_img of popup_imgs) {
+                let popup_img_rect = popup_img.getBoundingClientRect();
+                popup_img.width = popup_img_rect.width * popup_img_scale / 100;
+                popup_img.height = popup_img_rect.height * popup_img_scale / 100;
+                let blockquote = popup_img.parentNode.nextElementSibling;
+                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                    let margin_left = blockquote.style.marginLeft;
+                    if (margin_left) {
+                        // コメントの左マージンをサムネ画像倍率に合わせる
+                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
+                    }
+                }
+            }
+        }
+        let popup_rect = this.popup.getBoundingClientRect();
+        this.popup.style.minWidth = `${popup_rect.width}px`;    // 本来の表示幅より狭くならないように最小幅を設定
+        this.popup.remove();
         this.green_text.appendChild(this.popup);
 
         let font_elem_list = this.popup.getElementsByTagName("blockquote")[0].getElementsByTagName("font");
@@ -461,6 +533,7 @@ class Quote {
                 }
                 this.popup.style.display = "block";
             }
+
             if (selected_elm) {
                 let sel = window.getSelection();
                 if (sel.toString().length) {
@@ -484,14 +557,14 @@ class Quote {
 
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
-                // KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                // KOSHIAN NG 改の[隠す]ボタンを削除
                 //hide_button.className = "KOSHIAN_PopupHide";
                 hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
-                // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 //ng_switch.className = "KOSHIAN_PopupNG";
                 ng_switch.remove();
             }
@@ -640,6 +713,14 @@ class Reply {
         this.popup.style.maxWidth = "initial";
         if (popup_font_size) {
             this.popup.style.fontSize = `${popup_font_size}px`;
+            // ポップアップ内のKOSHIAN画像保存ボタンにフォントサイズを再設定
+            let image_save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
+            if (image_save_button && image_save_button.style.fontSize) {
+                let button_font_size = parseInt(image_save_button.style.fontSize, 10);
+                if (button_font_size > popup_font_size) {
+                    image_save_button.style.fontSize = `${popup_font_size}px`;
+                }
+            }
         } else {
             this.popup.style.fontSize = "";
         }
@@ -658,11 +739,29 @@ class Reply {
             this.popup.style.right = "";
             this.popup.style.display = "block";
 
-            let popup = this.popup.getBoundingClientRect();
+            // 測定前にサムネ画像倍率を反映
+            let popup_imgs = this.popup.getElementsByTagName("img");
+            if (popup_imgs.length) {
+                for (let popup_img of popup_imgs) {
+                    let popup_img_rect = popup_img.getBoundingClientRect();
+                    popup_img.width = popup_img_rect.width * popup_img_scale / 100;
+                    popup_img.height = popup_img_rect.height * popup_img_scale / 100;
+                    let blockquote = popup_img.parentNode.nextElementSibling;
+                    if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                        let margin_left = blockquote.style.marginLeft;
+                        if (margin_left) {
+                            // コメントの左マージンをサムネ画像倍率に合わせる
+                            blockquote.style.marginLeft = `${popup_img.width + 40}px`;
+                        }
+                    }
+                }
+            }
+
+            let popup_rect = this.popup.getBoundingClientRect();
             let window_right = document.documentElement.clientWidth + document.documentElement.scrollLeft;
             let popup_left = rc.left + popup_indent;
-            if (popup_left + popup.width > window_right) {
-                if (window_right - popup.width >= 0) {
+            if (popup_left + popup_rect.width > window_right) {
+                if (window_right - popup_rect.width >= 0) {
                     this.popup.style.left = "";
                     this.popup.style.right = "0px";
                 } else {
@@ -680,14 +779,14 @@ class Reply {
 
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
-                // KOSHIAN NG 改の[隠す]ボタンのclassを書換
+                // KOSHIAN NG 改の[隠す]ボタンを削除
                 //hide_button.className = "KOSHIAN_PopupHide";
                 hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
-                // KOSHIAN NG 改の[NGワード]ボタンのclassを書換
+                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 //ng_switch.className = "KOSHIAN_PopupNG";
                 ng_switch.remove();
             }
@@ -1069,6 +1168,7 @@ function onLoadSetting(result) {
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
     search_reply = safeGetValue(result.search_reply, DEFAULT_SEARCH_REPLY);
     popup_font_size = Number(safeGetValue(result.popup_font_size, DEFAULT_POPUP_FONT_SIZE));
+    popup_img_scale = Number(safeGetValue(result.popup_img_scale, DEFAULT_POPUP_IMG_SCALE));
 
     main();
 }
@@ -1088,6 +1188,7 @@ function onSettingChanged(changes, areaName) {
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
     search_reply = safeGetValue(changes.search_reply.newValue, DEFAULT_SEARCH_REPLY);
     popup_font_size = Number(safeGetValue(changes.popup_font_size.newValue, DEFAULT_POPUP_FONT_SIZE));
+    popup_img_scale = Number(safeGetValue(changes.popup_img_scale.newValue, DEFAULT_POPUP_IMG_SCALE));
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

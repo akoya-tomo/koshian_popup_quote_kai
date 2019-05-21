@@ -8,6 +8,7 @@ const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_SEARCH_REPLY = true;
 const DEFAULT_POPUP_FONT_SIZE = 0;
+const DEFAULT_POPUP_IMG_SCALE = 100;
 
 /* eslint indent: ["warn", 2] */
 
@@ -31,7 +32,8 @@ function saveOptions(e) {
     popup_perfect: document.querySelector("#popup_perfect").checked,
     search_selected_length: document.querySelector("#search_selected_length").value,
     search_reply: document.querySelector("#search_reply").checked,
-    popup_font_size: document.querySelector("#popup_font_size").value
+    popup_font_size: document.querySelector("#popup_font_size").value,
+    popup_img_scale: document.querySelector("#popup_img_scale").value
   });
 }
 
@@ -46,6 +48,7 @@ function setCurrentChoice(result) {
   document.querySelector("#search_selected_length").value = safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH);
   document.querySelector("#search_reply").checked = safeGetValue(result.search_reply, DEFAULT_SEARCH_REPLY);
   document.querySelector("#popup_font_size").value = safeGetValue(result.popup_font_size, DEFAULT_POPUP_FONT_SIZE);
+  document.querySelector("#popup_img_scale").value = safeGetValue(result.popup_img_scale, DEFAULT_POPUP_IMG_SCALE);
 
   document.querySelector("#save_button").addEventListener("click", saveOptions);
 }

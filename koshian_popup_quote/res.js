@@ -8,6 +8,7 @@ const DEFAULT_POPUP_PERFECT = true;
 const DEFAULT_SEARCH_SELECTED_LENGTH = 0;
 const DEFAULT_SEARCH_REPLY = true;
 const DEFAULT_POPUP_FONT_SIZE = 0;
+const DEFAULT_POPUP_IMG_SCALE = 100;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
@@ -23,6 +24,7 @@ let popup_perfect = DEFAULT_POPUP_PERFECT;
 let search_selected_length = DEFAULT_SEARCH_SELECTED_LENGTH;
 let search_reply = DEFAULT_SEARCH_REPLY;
 let popup_font_size = DEFAULT_POPUP_FONT_SIZE;
+let popup_img_scale = DEFAULT_POPUP_IMG_SCALE;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
 let g_thre = null;
 let g_response_list = [];
@@ -355,6 +357,23 @@ class Quote {
             this.popup.style.fontSize = "";
         }
         this.green_text.appendChild(this.popup);
+        // サムネ画像倍率を反映
+        let popup_imgs = this.popup.getElementsByTagName("img");
+        if (popup_imgs.length) {
+            for (let popup_img of popup_imgs) {
+                let popup_img_rect = popup_img.getBoundingClientRect();
+                popup_img.width = popup_img_rect.width * popup_img_scale / 100;
+                popup_img.height = popup_img_rect.height * popup_img_scale / 100;
+                let blockquote = popup_img.parentNode.nextElementSibling;
+                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                    let margin_left = blockquote.style.marginLeft;
+                    if (margin_left) {
+                        // コメントの左マージンをサムネ画像倍率に合わせる
+                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
+                    }
+                }
+            }
+        }
     }
 
     createPopupResponse() {
@@ -398,6 +417,23 @@ class Quote {
             this.popup.style.fontSize = "";
         }
         this.green_text.appendChild(this.popup);
+        // サムネ画像倍率を反映
+        let popup_imgs = this.popup.getElementsByTagName("img");
+        if (popup_imgs.length) {
+            for (let popup_img of popup_imgs) {
+                let popup_img_rect = popup_img.getBoundingClientRect();
+                popup_img.width = popup_img_rect.width * popup_img_scale / 100;
+                popup_img.height = popup_img_rect.height * popup_img_scale / 100;
+                let blockquote = popup_img.parentNode.nextElementSibling;
+                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                    let margin_left = blockquote.style.marginLeft;
+                    if (margin_left) {
+                        // コメントの左マージンをサムネ画像倍率に合わせる
+                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
+                    }
+                }
+            }
+        }
 
         let font_elem_list = this.popup.getElementsByTagName("blockquote")[0].getElementsByTagName("font");
         for (let i = 0; i < font_elem_list.length; ++i) {
@@ -657,6 +693,24 @@ class Reply {
             this.popup.style.left = "0px";
             this.popup.style.right = "";
             this.popup.style.display = "block";
+
+            // サムネ画像倍率を反映
+            let popup_imgs = this.popup.getElementsByTagName("img");
+            if (popup_imgs.length) {
+                for (let popup_img of popup_imgs) {
+                    let popup_img_rect = popup_img.getBoundingClientRect();
+                    popup_img.width = popup_img_rect.width * popup_img_scale / 100;
+                    popup_img.height = popup_img_rect.height * popup_img_scale / 100;
+                    let blockquote = popup_img.parentNode.nextElementSibling;
+                    if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                        let margin_left = blockquote.style.marginLeft;
+                        if (margin_left) {
+                            // コメントの左マージンをサムネ画像倍率に合わせる
+                            blockquote.style.marginLeft = `${popup_img.width + 40}px`;
+                        }
+                    }
+                }
+            }
 
             let popup = this.popup.getBoundingClientRect();
             let window_right = document.documentElement.clientWidth + document.documentElement.scrollLeft;
@@ -1069,6 +1123,7 @@ function onLoadSetting(result) {
     search_selected_length = Number(safeGetValue(result.search_selected_length, DEFAULT_SEARCH_SELECTED_LENGTH));
     search_reply = safeGetValue(result.search_reply, DEFAULT_SEARCH_REPLY);
     popup_font_size = Number(safeGetValue(result.popup_font_size, DEFAULT_POPUP_FONT_SIZE));
+    popup_img_scale = Number(safeGetValue(result.popup_img_scale, DEFAULT_POPUP_IMG_SCALE));
 
     main();
 }
@@ -1088,6 +1143,7 @@ function onSettingChanged(changes, areaName) {
     search_selected_length = Number(safeGetValue(changes.search_selected_length.newValue, DEFAULT_SEARCH_SELECTED_LENGTH));
     search_reply = safeGetValue(changes.search_reply.newValue, DEFAULT_SEARCH_REPLY);
     popup_font_size = Number(safeGetValue(changes.popup_font_size.newValue, DEFAULT_POPUP_FONT_SIZE));
+    popup_img_scale = Number(safeGetValue(changes.popup_img_scale.newValue, DEFAULT_POPUP_IMG_SCALE));
 }
 
 browser.storage.local.get().then(onLoadSetting, onError);

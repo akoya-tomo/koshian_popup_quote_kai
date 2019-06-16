@@ -30,12 +30,15 @@
     <img src="images/screenshot05.png?raw=true" alt="スクリーンショット" title="スクリーンショット" width="700px">  
   - 「ポップアップの文字サイズ」オプションを追加（デフォルト：0 = 標準の文字サイズ）  
     ポップアップの文字サイズを変更することができます。  
-  - ![\(New\)](images/new.png "New") 「ポップアップのサムネ画像倍率」オプションを追加（デフォルト：100%）  
+  - 「ポップアップのサムネ画像倍率」オプションを追加（デフォルト：100%）  
     ポップアップのサムネ画像の表示倍率を変更することができます。  
 
 ## インストール
 **GitHub**  
-[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.9.0/koshian_popup_quote_kai-1.9.0-fx.xpi)  
+[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.9.1/koshian_popup_quote_kai-1.9.1-fx.xpi)  
+
+※![\(New\)](images/new.png "New") v1.9.1からアドオンのアクセス許可に「」ッチー(`tsumanne.net`)・FTBucket(`ftbucket.info`)が追加になります。（アドオンを動作させるため）  
+※v1.2.2からアドオンのアクセス許可にふたポの過去ログ\(`kako.futakuro.com`\)が追加になります。（アドオンを動作させるため） 
 
 ※「接続エラーのため、アドオンをダウンロードできませんでした。」と表示されてインストール出来ない時はリンクを右クリックしてxpiファイルをダウンロードし、メニューのツール→アドオン（またはCtrl+Shift+A）で表示されたアドオンマネージャーのページにxpiファイルをドラッグ＆ドロップして下さい。  
 
@@ -73,6 +76,8 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.9.1 2019-06-17
+  - アドオンを実行するサイトにログサイト2件を追加
 * v1.9.0 2019-05-21
   - ポップアップのサムネ画像倍率オプションを追加
   - 引用ポップアップが二段目以降レイアウトが崩れる不具合を修正

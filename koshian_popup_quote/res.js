@@ -956,41 +956,43 @@ function main() {
     process(0, g_response_list.length);
     g_last_response_num = g_response_list.length;
 
-    document.addEventListener("KOSHIAN_reload", (e) => {
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mouseup", onMouseUp);
+
+    // KOSHIAN リロード監視
+    document.addEventListener("KOSHIAN_reload", () => {
         let prev_res_num = g_last_response_num;
         let cur_res_num = g_response_list.length;
         process(prev_res_num, cur_res_num);
         g_last_response_num = cur_res_num;
     });
-    document.addEventListener("mousedown", onMouseDown);
-    document.addEventListener("mouseup", onMouseUp);
 
+    // ふたば リロード監視
     let contdisp = document.getElementById("contdisp");
     if (contdisp) {
-        check2chanReload(contdisp);
+        checkFutabaReload(contdisp);
     }
 
-    function check2chanReload(target) {
+    function checkFutabaReload(target) {
         let status = "";
         let reloading = false;
         let config = { childList: true };
-        let observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (target.textContent == status) return;
-                status = target.textContent;
-                if (status == "・・・") {
-                    reloading = true;
-                } else
-                if (reloading && status.endsWith("頃消えます")) {
-                    let prev_res_num = g_last_response_num;
-                    let cur_res_num = g_response_list.length;
-                    process(prev_res_num, cur_res_num);
-                    g_last_response_num = cur_res_num;
-                    reloading = false;
-                } else {
-                    reloading = false;
-                }
-            });
+        let observer = new MutationObserver(function() {
+            if (target.textContent == status) {
+                return;
+            }
+            status = target.textContent;
+            if (status == "・・・") {
+                reloading = true;
+            } else if (reloading && status.endsWith("頃消えます")) {
+                let prev_res_num = g_last_response_num;
+                let cur_res_num = g_response_list.length;
+                process(prev_res_num, cur_res_num);
+                g_last_response_num = cur_res_num;
+                reloading = false;
+            } else {
+                reloading = false;
+            }
         });
         observer.observe(target, config);
     }

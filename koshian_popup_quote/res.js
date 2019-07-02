@@ -275,7 +275,12 @@ class Quote {
         } else {
             search_text = search_text.slice(1).replace(/^[\s]+|[\s]+$/g, "");
         }
-        if (!search_text.length) return -1;
+        if (this.green_text.getElementsByClassName("KOSHIAN_PreviewSwitch").length) {
+            search_text = search_text.replace(/\[見る\]|\[隠す\](\n|\r\n)?/g, "");
+        }
+        if (!search_text.length) {
+            return -1;
+        }
 
         let origin = [];    // 行単位で一致
         let origin_kouho = [];  // 部分一致
@@ -557,15 +562,15 @@ class Quote {
 
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
-                // KOSHIAN NG 改の[隠す]ボタンを削除
                 //hide_button.className = "KOSHIAN_PopupHide";
+                // KOSHIAN NG 改の[隠す]ボタンを削除
                 hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
-                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 //ng_switch.className = "KOSHIAN_PopupNG";
+                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 ng_switch.remove();
             }
 
@@ -579,7 +584,7 @@ class Quote {
         }
     }
 
-    hide(e) {
+    hide(e) {   // eslint-disable-line no-unused-vars
         if (this.popup) {
             if (use_futaba_lightbox) {
                 this.popup.remove();
@@ -597,8 +602,8 @@ class Quote {
 
         let clientW = document.documentElement.clientWidth;
         let clientH = document.documentElement.clientHeight;
-        let page_mouse_x = mouse_client_x + document.documentElement.scrollLeft;
-        let page_mouse_y = mouse_client_y + document.documentElement.scrollTop;
+        //let page_mouse_x = mouse_client_x + document.documentElement.scrollLeft;
+        //let page_mouse_y = mouse_client_y + document.documentElement.scrollTop;
         let elem_position = elem.getBoundingClientRect();
 
         rc.left = (elem_position.left + document.documentElement.scrollLeft);
@@ -629,7 +634,9 @@ class Reply {
         let reply = this;
 
         this.green_text.addEventListener("mouseenter", (e) => {
-            if (reply.mouseon) return;
+            if (reply.mouseon) {
+                return;
+            }
             reply.mouseon = true;
 
             if (!reply.timer) {
@@ -779,15 +786,15 @@ class Reply {
 
             let hide_button = this.popup.getElementsByClassName("KOSHIAN_HideButton")[0];
             if (hide_button) {
-                // KOSHIAN NG 改の[隠す]ボタンを削除
                 //hide_button.className = "KOSHIAN_PopupHide";
+                // KOSHIAN NG 改の[隠す]ボタンを削除
                 hide_button.remove();
             }
 
             let ng_switch = this.popup.getElementsByClassName("KOSHIAN_NGSwitch")[0];
             if (ng_switch) {
-                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 //ng_switch.className = "KOSHIAN_PopupNG";
+                // KOSHIAN NG 改の[NGワード]ボタンを削除
                 ng_switch.remove();
             }
 
@@ -846,7 +853,9 @@ function createPopup(rtd, index) {
                     if (previous_index > -1) {
                         // 引用元に前回探索した引用の引用元が存在したときは前回設置した返信No.を削除する
                         let previous_quote_index = previous_quote.findOriginIndex(true, origin_index);
-                        if (previous_quote_index > -1) removeReplyNo(previous_index);
+                        if (previous_quote_index > -1) {
+                            removeReplyNo(previous_index);
+                        }
                     }
                     previous_index = origin_index;
                     previous_quote = quote;
@@ -953,50 +962,56 @@ function main() {
     process(0, g_response_list.length);
     g_last_response_num = g_response_list.length;
 
-    document.addEventListener("KOSHIAN_reload", (e) => {
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mouseup", onMouseUp);
+
+    // KOSHIAN リロード監視
+    document.addEventListener("KOSHIAN_reload", () => {
         let prev_res_num = g_last_response_num;
         let cur_res_num = g_response_list.length;
         process(prev_res_num, cur_res_num);
         g_last_response_num = cur_res_num;
     });
-    document.addEventListener("mousedown", onMouseDown);
-    document.addEventListener("mouseup", onMouseUp);
 
+    // ふたば リロード監視
     let contdisp = document.getElementById("contdisp");
     if (contdisp) {
-        check2chanReload(contdisp);
+        checkFutabaReload(contdisp);
     }
 
-    function check2chanReload(target) {
+    function checkFutabaReload(target) {
         let status = "";
         let reloading = false;
         let config = { childList: true };
-        let observer = new MutationObserver(function(mutations) {
-            mutations.forEach(function(mutation) {
-                if (target.textContent == status) return;
-                status = target.textContent;
-                if (status == "・・・") {
-                    reloading = true;
-                } else
-                if (reloading && status.endsWith("頃消えます")) {
-                    let prev_res_num = g_last_response_num;
-                    let cur_res_num = g_response_list.length;
-                    process(prev_res_num, cur_res_num);
-                    g_last_response_num = cur_res_num;
-                    reloading = false;
-                } else {
-                    reloading = false;
-                }
-            });
+        let observer = new MutationObserver(function() {
+            if (target.textContent == status) {
+                return;
+            }
+            status = target.textContent;
+            if (status == "・・・") {
+                reloading = true;
+            } else if (reloading && status.endsWith("頃消えます")) {
+                let prev_res_num = g_last_response_num;
+                let cur_res_num = g_response_list.length;
+                process(prev_res_num, cur_res_num);
+                g_last_response_num = cur_res_num;
+                reloading = false;
+            } else {
+                reloading = false;
+            }
         });
         observer.observe(target, config);
     }
 }
 
 function onMouseDown(e) {
-    if (e.button != 0 || !search_selected_length) return;
-    // 左ボタン押下場所が選択文字列のfont要素ならテキスト置換中止
-    if (e.target.className == "KOSHIAN_selected_font") return;
+    if (e.button != 0 || !search_selected_length) {
+        return;
+    }
+    if (e.target.className == "KOSHIAN_selected_font") {
+        // 左ボタン押下場所が選択文字列のfont要素ならテキスト置換中止
+        return;
+    }
 
     // 選択文字列のfont要素をテキストノードに戻す
     let koshian_response = e.target.closest(".KOSHIAN_response");
@@ -1005,27 +1020,37 @@ function onMouseDown(e) {
 }
 
 function onMouseUp(e) {
-    if (e.button != 0 || (!selected_elm && !search_selected_length)) return;
-    // 左ボタンを離した場所が選択文字列のfont要素上なら中止
-    if (e.target.className == "KOSHIAN_selected_font") return;
+    if (e.button != 0 || (!selected_elm && !search_selected_length)) {
+        return;
+    }
+    if (e.target.className == "KOSHIAN_selected_font") {
+        // 左ボタンを離した場所が選択文字列のfont要素上なら中止
+        return;
+    }
 
     // 選択文字列のfont要素をテキストノードに戻す
     let koshian_response = e.target.closest(".KOSHIAN_response");
     replaceText(koshian_response, "KOSHIAN_selected_font");
     selected_elm = null;
 
-    if (!search_selected_length) return;
+    if (!search_selected_length) {
+        return;
+    }
 
     let sel = window.getSelection();
     let sel_str = sel.toString();
     if (sel_str.length < search_selected_length ||
         sel_str.match(/\r|\n/) ||
-        sel.rangeCount > 1) return;
+        sel.rangeCount > 1) {
+        return;
+    }
     let sel_elm = sel.anchorNode;
     if (sel_elm.nodeName != "BLOCKQUOTE") {
         sel_elm = sel_elm.parentNode;
-        // 選択場所がレス本文以外なら中止
-        if (!isInsideBlockquote(sel_elm)) return;
+        if (!isInsideBlockquote(sel_elm)) {
+            // 選択場所がレス本文以外なら中止
+            return;
+        }
     }
 
     let font_elm = document.createElement("font");
@@ -1096,14 +1121,12 @@ function onMouseUp(e) {
 function replaceText(element, class_name) {
     element = element ? element : document;
     let elements = element.getElementsByClassName(class_name);
-    if (elements) {
-        for (let i = 0; i < elements.length; i++) {
-            let text = getText(elements[i]);
-            if (text) {
-                let text_node = document.createTextNode(text);
-                let elm_parent = elements[i].parentNode;
-                elm_parent.replaceChild(text_node, elements[i]);
-            }
+    for (let i = 0; i < elements.length; ++i) {
+        let text = getText(elements[i]);
+        if (text) {
+            let text_node = document.createTextNode(text);
+            let elm_parent = elements[i].parentNode;
+            elm_parent.replaceChild(text_node, elements[i]);
         }
     }
 

@@ -848,6 +848,7 @@ class Reply {
 function putIndex(rtd, index) {
     if (rtd.firstElementChild.className != "KOSHIAN_reply_no") {
         let reply = document.createElement("span");
+        reply.id = `KOSHIAN_reply_no${index}`;
         reply.className = "KOSHIAN_reply_no";
         reply.textContent = `${index}`;
         reply.style.color = `#601010`;
@@ -1170,12 +1171,8 @@ function isInsideBlockquote(element){
  * @param {Element} replyNo_elm レス番号の要素
  */
 function moveToResponse(replyNo_elm){
-    let input = replyNo_elm.nextElementSibling;
-    if (input.nodeName == "INPUT" && input.id) {
-        let id = input.id;
-        if (id.slice(-1) == "_") {
-            id = input.id.slice(0, -1);
-        }
+    let id = replyNo_elm.id;
+    if (id) {
         let target = document.getElementById(id);
         if (target) {
             target.scrollIntoView(true);

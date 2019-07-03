@@ -586,8 +586,15 @@ class Quote {
 
             let save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
             if (save_button) {
-                //KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
+                // KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
                 save_button.className = "KOSHIAN_PopupSave";
+            }
+
+            let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
+            for (let preview_switch of preview_switches) {
+                //preview_switch.className = "KOSHIAN_PopupPreview";
+                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                preview_switch.remove();
             }
 
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
@@ -817,6 +824,13 @@ class Reply {
             if (save_button) {
                 // KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
                 save_button.className = "KOSHIAN_PopupSave";
+            }
+
+            let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
+            for (let preview_switch of preview_switches) {
+                //preview_switch.className = "KOSHIAN_PopupPreview";
+                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                preview_switch.remove();
             }
 
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));

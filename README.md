@@ -35,7 +35,7 @@
 
 ## インストール
 **GitHub**  
-[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.9.2/koshian_popup_quote_kai-1.9.2-fx.xpi)  
+[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.9.3/koshian_popup_quote_kai-1.9.3-fx.xpi)  
 
 ※![\(New\)](images/new.png "New") v1.9.1からアドオンのアクセス許可に「」ッチー(`tsumanne.net`)・FTBucket(`ftbucket.info`)が追加になります。（アドオンを動作させるため）  
 ※v1.2.2からアドオンのアクセス許可にふたポの過去ログ\(`kako.futakuro.com`\)が追加になります。（アドオンを動作させるため） 
@@ -76,6 +76,11 @@
   選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.9.3 2019-07-04
+  - ログサイトでポップアップ内の塩のプレビューが表示されないことがある不具合を修正
+  - ログサイトでポップアップ内のレス番号クリックで移動しないことがある不具合を修正
+  - レス番号クリックでの移動のスクロール位置を画面上端から画面中央に変更
+  - ポップアップ内のKOSHIAN 自動リンク生成（改）のプレビューボタンを表示しないように修正
 * v1.9.2 2019-07-03
   - KOSHIAN 自動リンク生成（改）がプレビューを作成したリンクがポップアップされない不具合を修正
   - リロードの監視を修正

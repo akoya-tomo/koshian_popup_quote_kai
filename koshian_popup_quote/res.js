@@ -382,18 +382,23 @@ class Quote {
         this.popup.style.left = "0px";
         // 測定前にサムネ画像倍率を反映
         let popup_imgs = this.popup.getElementsByTagName("img");
-        if (popup_imgs.length) {
-            for (let popup_img of popup_imgs) {
-                let popup_img_rect = popup_img.getBoundingClientRect();
+        for (let popup_img of popup_imgs) {
+            let popup_img_rect = popup_img.getBoundingClientRect();
+            if (popup_img_rect.width && popup_img_rect.height) {
                 popup_img.width = popup_img_rect.width * popup_img_scale / 100;
                 popup_img.height = popup_img_rect.height * popup_img_scale / 100;
-                let blockquote = popup_img.parentNode.nextElementSibling;
-                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
-                    let margin_left = blockquote.style.marginLeft;
-                    if (margin_left) {
-                        // コメントの左マージンをサムネ画像倍率に合わせる
-                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
-                    }
+            } else if (popup_img.style.maxWidth && popup_img.style.maxHeight) {
+                popup_img.style.maxWidth = `${parseInt(popup_img.style.maxWidth, 10) * popup_img_scale / 100}px`;
+                popup_img.style.maxHeight = `${parseInt(popup_img.style.maxHeight, 10) * popup_img_scale / 100}px`;
+            } else {
+                continue;
+            }
+            let blockquote = popup_img.parentNode.nextElementSibling;
+            if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                let margin_left = blockquote.style.marginLeft;
+                if (margin_left && popup_img.width) {
+                    // コメントの左マージンをサムネ画像倍率に合わせる
+                    blockquote.style.marginLeft = `${popup_img.width + 40}px`;
                 }
             }
         }
@@ -456,18 +461,23 @@ class Quote {
         this.popup.style.left = "0px";
         // 測定前にサムネ画像倍率を反映
         let popup_imgs = this.popup.getElementsByTagName("img");
-        if (popup_imgs.length) {
-            for (let popup_img of popup_imgs) {
-                let popup_img_rect = popup_img.getBoundingClientRect();
+        for (let popup_img of popup_imgs) {
+            let popup_img_rect = popup_img.getBoundingClientRect();
+            if (popup_img_rect.width && popup_img_rect.height) {
                 popup_img.width = popup_img_rect.width * popup_img_scale / 100;
                 popup_img.height = popup_img_rect.height * popup_img_scale / 100;
-                let blockquote = popup_img.parentNode.nextElementSibling;
-                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
-                    let margin_left = blockquote.style.marginLeft;
-                    if (margin_left) {
-                        // コメントの左マージンをサムネ画像倍率に合わせる
-                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
-                    }
+            } else if (popup_img.style.maxWidth && popup_img.style.maxHeight) {
+                popup_img.style.maxWidth = `${parseInt(popup_img.style.maxWidth, 10) * popup_img_scale / 100}px`;
+                popup_img.style.maxHeight = `${parseInt(popup_img.style.maxHeight, 10) * popup_img_scale / 100}px`;
+            } else {
+                continue;
+            }
+            let blockquote = popup_img.parentNode.nextElementSibling;
+            if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                let margin_left = blockquote.style.marginLeft;
+                if (margin_left && popup_img.width) {
+                    // コメントの左マージンをサムネ画像倍率に合わせる
+                    blockquote.style.marginLeft = `${popup_img.width + 40}px`;
                 }
             }
         }
@@ -576,8 +586,15 @@ class Quote {
 
             let save_button = this.popup.getElementsByClassName("KOSHIAN_SaveButton")[0];
             if (save_button) {
-                //KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
+                // KOSHIAN 画像保存ボタンの[保存]ボタンのclassを書換
                 save_button.className = "KOSHIAN_PopupSave";
+            }
+
+            let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
+            for (let preview_switch of preview_switches) {
+                //preview_switch.className = "KOSHIAN_PopupPreview";
+                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                preview_switch.remove();
             }
 
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
@@ -748,18 +765,23 @@ class Reply {
 
             // 測定前にサムネ画像倍率を反映
             let popup_imgs = this.popup.getElementsByTagName("img");
-            if (popup_imgs.length) {
-                for (let popup_img of popup_imgs) {
-                    let popup_img_rect = popup_img.getBoundingClientRect();
+            for (let popup_img of popup_imgs) {
+                let popup_img_rect = popup_img.getBoundingClientRect();
+                if (popup_img_rect.width && popup_img_rect.height) {
                     popup_img.width = popup_img_rect.width * popup_img_scale / 100;
                     popup_img.height = popup_img_rect.height * popup_img_scale / 100;
-                    let blockquote = popup_img.parentNode.nextElementSibling;
-                    if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
-                        let margin_left = blockquote.style.marginLeft;
-                        if (margin_left) {
-                            // コメントの左マージンをサムネ画像倍率に合わせる
-                            blockquote.style.marginLeft = `${popup_img.width + 40}px`;
-                        }
+                } else if (popup_img.style.maxWidth && popup_img.style.maxHeight) {
+                    popup_img.style.maxWidth = `${parseInt(popup_img.style.maxWidth, 10) * popup_img_scale / 100}px`;
+                    popup_img.style.maxHeight = `${parseInt(popup_img.style.maxHeight, 10) * popup_img_scale / 100}px`;
+                } else {
+                    continue;
+                }
+                let blockquote = popup_img.parentNode.nextElementSibling;
+                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                    let margin_left = blockquote.style.marginLeft;
+                    if (margin_left && popup_img.width) {
+                        // コメントの左マージンをサムネ画像倍率に合わせる
+                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
                     }
                 }
             }
@@ -804,6 +826,13 @@ class Reply {
                 save_button.className = "KOSHIAN_PopupSave";
             }
 
+            let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
+            for (let preview_switch of preview_switches) {
+                //preview_switch.className = "KOSHIAN_PopupPreview";
+                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                preview_switch.remove();
+            }
+
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
         }
     }
@@ -833,6 +862,7 @@ class Reply {
 function putIndex(rtd, index) {
     if (rtd.firstElementChild.className != "KOSHIAN_reply_no") {
         let reply = document.createElement("span");
+        reply.id = `KOSHIAN_reply_no${index}`;
         reply.className = "KOSHIAN_reply_no";
         reply.textContent = `${index}`;
         reply.style.color = `#601010`;
@@ -1155,15 +1185,11 @@ function isInsideBlockquote(element){
  * @param {Element} replyNo_elm レス番号の要素
  */
 function moveToResponse(replyNo_elm){
-    let input = replyNo_elm.nextElementSibling;
-    if (input.nodeName == "INPUT" && input.id) {
-        let id = input.id;
-        if (id.slice(-1) == "_") {
-            id = input.id.slice(0, -1);
-        }
+    let id = replyNo_elm.id;
+    if (id) {
         let target = document.getElementById(id);
         if (target) {
-            target.scrollIntoView(true);
+            target.parentElement.scrollIntoView({block: "center"});
             target.parentElement.style.backgroundColor = "#ffcc99";
             setTimeout(() => {
                 target.parentElement.style.backgroundColor = "";

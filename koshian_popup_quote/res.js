@@ -382,18 +382,23 @@ class Quote {
         this.popup.style.left = "0px";
         // 測定前にサムネ画像倍率を反映
         let popup_imgs = this.popup.getElementsByTagName("img");
-        if (popup_imgs.length) {
-            for (let popup_img of popup_imgs) {
-                let popup_img_rect = popup_img.getBoundingClientRect();
+        for (let popup_img of popup_imgs) {
+            let popup_img_rect = popup_img.getBoundingClientRect();
+            if (popup_img_rect.width && popup_img_rect.height) {
                 popup_img.width = popup_img_rect.width * popup_img_scale / 100;
                 popup_img.height = popup_img_rect.height * popup_img_scale / 100;
-                let blockquote = popup_img.parentNode.nextElementSibling;
-                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
-                    let margin_left = blockquote.style.marginLeft;
-                    if (margin_left) {
-                        // コメントの左マージンをサムネ画像倍率に合わせる
-                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
-                    }
+            } else if (popup_img.style.maxWidth && popup_img.style.maxHeight) {
+                popup_img.style.maxWidth = `${parseInt(popup_img.style.maxWidth, 10) * popup_img_scale / 100}px`;
+                popup_img.style.maxHeight = `${parseInt(popup_img.style.maxHeight, 10) * popup_img_scale / 100}px`;
+            } else {
+                continue;
+            }
+            let blockquote = popup_img.parentNode.nextElementSibling;
+            if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                let margin_left = blockquote.style.marginLeft;
+                if (margin_left && popup_img.width) {
+                    // コメントの左マージンをサムネ画像倍率に合わせる
+                    blockquote.style.marginLeft = `${popup_img.width + 40}px`;
                 }
             }
         }
@@ -456,18 +461,23 @@ class Quote {
         this.popup.style.left = "0px";
         // 測定前にサムネ画像倍率を反映
         let popup_imgs = this.popup.getElementsByTagName("img");
-        if (popup_imgs.length) {
-            for (let popup_img of popup_imgs) {
-                let popup_img_rect = popup_img.getBoundingClientRect();
+        for (let popup_img of popup_imgs) {
+            let popup_img_rect = popup_img.getBoundingClientRect();
+            if (popup_img_rect.width && popup_img_rect.height) {
                 popup_img.width = popup_img_rect.width * popup_img_scale / 100;
                 popup_img.height = popup_img_rect.height * popup_img_scale / 100;
-                let blockquote = popup_img.parentNode.nextElementSibling;
-                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
-                    let margin_left = blockquote.style.marginLeft;
-                    if (margin_left) {
-                        // コメントの左マージンをサムネ画像倍率に合わせる
-                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
-                    }
+            } else if (popup_img.style.maxWidth && popup_img.style.maxHeight) {
+                popup_img.style.maxWidth = `${parseInt(popup_img.style.maxWidth, 10) * popup_img_scale / 100}px`;
+                popup_img.style.maxHeight = `${parseInt(popup_img.style.maxHeight, 10) * popup_img_scale / 100}px`;
+            } else {
+                continue;
+            }
+            let blockquote = popup_img.parentNode.nextElementSibling;
+            if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                let margin_left = blockquote.style.marginLeft;
+                if (margin_left && popup_img.width) {
+                    // コメントの左マージンをサムネ画像倍率に合わせる
+                    blockquote.style.marginLeft = `${popup_img.width + 40}px`;
                 }
             }
         }
@@ -748,18 +758,23 @@ class Reply {
 
             // 測定前にサムネ画像倍率を反映
             let popup_imgs = this.popup.getElementsByTagName("img");
-            if (popup_imgs.length) {
-                for (let popup_img of popup_imgs) {
-                    let popup_img_rect = popup_img.getBoundingClientRect();
+            for (let popup_img of popup_imgs) {
+                let popup_img_rect = popup_img.getBoundingClientRect();
+                if (popup_img_rect.width && popup_img_rect.height) {
                     popup_img.width = popup_img_rect.width * popup_img_scale / 100;
                     popup_img.height = popup_img_rect.height * popup_img_scale / 100;
-                    let blockquote = popup_img.parentNode.nextElementSibling;
-                    if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
-                        let margin_left = blockquote.style.marginLeft;
-                        if (margin_left) {
-                            // コメントの左マージンをサムネ画像倍率に合わせる
-                            blockquote.style.marginLeft = `${popup_img.width + 40}px`;
-                        }
+                } else if (popup_img.style.maxWidth && popup_img.style.maxHeight) {
+                    popup_img.style.maxWidth = `${parseInt(popup_img.style.maxWidth, 10) * popup_img_scale / 100}px`;
+                    popup_img.style.maxHeight = `${parseInt(popup_img.style.maxHeight, 10) * popup_img_scale / 100}px`;
+                } else {
+                    continue;
+                }
+                let blockquote = popup_img.parentNode.nextElementSibling;
+                if (blockquote && blockquote.tagName == "BLOCKQUOTE") {
+                    let margin_left = blockquote.style.marginLeft;
+                    if (margin_left && popup_img.width) {
+                        // コメントの左マージンをサムネ画像倍率に合わせる
+                        blockquote.style.marginLeft = `${popup_img.width + 40}px`;
                     }
                 }
             }

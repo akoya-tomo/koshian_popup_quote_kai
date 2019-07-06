@@ -363,9 +363,24 @@ class Quote {
 
         // div要素を作りたいのでrd要素のクローンじゃだめ
         for (let ch = g_thre.firstChild; ch != null; ch = ch.nextSibling) {
-            this.popup.appendChild(ch.cloneNode(true));
-            if (ch.nodeName == "BLOCKQUOTE") {
-                break;
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+                let anchor = document.createElement("a");
+                anchor.href = "javascript:void(0);";
+                anchor.className = "KOSHIAN_reply_no";
+                anchor.title = "スレ先頭に移動";
+                anchor.innerText = `[スレ] `;
+                anchor.addEventListener("click", () => {
+                    for (let popup = this; popup; popup = popup.parent) {
+                        popup.hide();
+                    }
+                    moveToResponse(ch);
+                }, false);
+                this.popup.appendChild(anchor);
+            } else {
+                this.popup.appendChild(ch.cloneNode(true));
+                if (ch.nodeName == "BLOCKQUOTE") {
+                    break;
+                }
             }
         }
 
@@ -919,6 +934,9 @@ function putIndex(rtd, index) {
         reply.className = "KOSHIAN_reply_no";
         reply.textContent = `${index}`;
         reply.style.color = `#601010`;
+        if (index == 0) {
+            reply.style.display = "none";
+        }
 
         rtd.insertBefore(reply, rtd.firstChild);
     }
@@ -1041,6 +1059,7 @@ function main() {
 
     // add search targets by thre
     search_targets.push(SearchTarget.createByThre(g_thre));
+    putIndex(g_thre, 0);
 
     process(0, g_response_list.length);
     g_last_response_num = g_response_list.length;
@@ -1260,16 +1279,16 @@ function isInsideBlockquote(element){
  * @param {Element} replyNo_elm レス番号の要素
  */
 function moveToResponse(replyNo_elm){
-    let id = replyNo_elm.id;
-    if (id) {
-        let target = document.getElementById(id);
-        if (target) {
-            target.parentElement.scrollIntoView({block: "center"});
-            target.parentElement.style.backgroundColor = "#ffcc99";
-            setTimeout(() => {
-                target.parentElement.style.backgroundColor = "";
-            }, 2000);
-        }
+    let target = replyNo_elm.parentNode;
+    if (replyNo_elm.id == "KOSHIAN_reply_no0") {
+        target = target.getElementsByTagName("blockquote")[0];
+    }
+    if (target) {
+        target.scrollIntoView({block: "center"});
+        target.style.backgroundColor = "#ffcc99";
+        setTimeout(() => {
+            target.style.backgroundColor = "";
+        }, 2000);
     }
 }
 

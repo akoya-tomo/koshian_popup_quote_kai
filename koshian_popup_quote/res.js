@@ -1272,6 +1272,9 @@ function getInnerText(element, class_name) {
     for (let node = element.firstChild; node; node = node.nextSibling) {
         if (node.className == class_name) {
             continue;
+        } else if (node.nodeName == "A") {
+            // aタグは更に子ノードのテキストを取得（FTBucketの外部リンク対策）
+            text += getInnerText(node, class_name);
         } else if (node.nodeName == "BR") {
             text += "\n";
         } else {

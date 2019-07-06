@@ -1053,6 +1053,11 @@ function main() {
         reply_no_list[0].remove();
     }
 
+    let response_list = g_thre.getElementsByClassName("KOSHIAN_Response");
+    while (response_list.length) {
+        response_list[0].remove();
+    }
+
     g_response_list = g_thre.getElementsByClassName("rtd");
     have_sod = document.getElementsByClassName("sod").length > 0;
     have_del = document.getElementsByClassName("del").length > 0;

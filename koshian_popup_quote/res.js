@@ -791,6 +791,7 @@ class Reply {
             let rc = Reply.getPopupPosition(e.clientX, e.clientY, this.green_text);
 
             this.popup.style.top = `${rc.top + rc.height - 2}px`;
+            let popup_left = rc.left + popup_indent;
             this.popup.style.left = "0px";
             this.popup.style.right = "";
             this.popup.style.display = "block";
@@ -818,16 +819,17 @@ class Reply {
                 }
             }
 
+            // ポップアップが画面右端からはみ出る時は右端にそろえる
             let popup_rect = this.popup.getBoundingClientRect();
-            let window_right = document.documentElement.clientWidth + document.documentElement.scrollLeft;
-            let popup_left = rc.left + popup_indent;
+            let doc_width = document.documentElement.clientWidth;
+            let window_right = doc_width + document.documentElement.scrollLeft;
             if (popup_left + popup_rect.width > window_right) {
-                if (window_right - popup_rect.width >= 0) {
-                    this.popup.style.left = "";
-                    this.popup.style.right = "0px";
-                } else {
-                    this.popup.style.left = `0px`;
+                if (doc_width < popup_rect.width) {
+                    this.popup.style.maxWidth = `${doc_width}px`;
+                    this.popup.style.minWidth = `${doc_width}px`;
                 }
+                this.popup.style.left = "";
+                this.popup.style.right = "0px";
             } else {
                 this.popup.style.left = `${popup_left}px`;
             }

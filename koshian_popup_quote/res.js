@@ -10,6 +10,7 @@ const DEFAULT_SEARCH_REPLY = true;
 const DEFAULT_POPUP_FONT_SIZE = 0;
 const DEFAULT_POPUP_IMG_SCALE = 100;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
+const DEFAULT_POPUP_HIDDEN_TIME = 300;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
@@ -26,6 +27,7 @@ let search_reply = DEFAULT_SEARCH_REPLY;
 let popup_font_size = DEFAULT_POPUP_FONT_SIZE;
 let popup_img_scale = DEFAULT_POPUP_IMG_SCALE;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
+let popup_hidden_time = DEFAULT_POPUP_HIDDEN_TIME;
 let g_thre = null;
 let g_response_list = [];
 let g_last_response_num = 0;
@@ -188,7 +190,8 @@ class Quote {
         this.popup = null;
         this.initialized = false;
         this.mouseon = false;
-        this.timer = false;
+        this.timer_shown = null;
+        this.timer_hidden = null;
         this.is_selected = is_selected;
         if (this.parent) {
             this.zIndex = this.parent.zIndex;
@@ -200,17 +203,19 @@ class Quote {
 
         this.green_text.addEventListener("mouseenter", (e) => {
             quote.mouseon = true;
+            if (quote.timer_hidden) {
+                clearTimeout(quote.timer_hidden);
+                quote.timer_hidden = null;
+            }
 
-            if (!quote.timer) {
-                setTimeout(() => {
-                    quote.timer = false;
+            if (!quote.timer_shown) {
+                quote.timer_shown = setTimeout(() => {
+                    quote.timer_shown = null;
 
                     if (quote.mouseon) {
                         quote.show(e);
                     }
                 }, popup_time);
-
-                quote.timer = true;
             }
 
             if (e.buttons == 1) {
@@ -231,8 +236,18 @@ class Quote {
                 return;
             }
             quote.mouseon = false;
-            quote.hide(e);
-            quote_mouse_down = false;
+            if (quote.timer_shown) {
+                clearTimeout(quote.timer_shown);
+                quote.timer_shown = null;
+            }
+
+            if (!quote.timer_hidden) {
+                quote.timer_hidden = setTimeout(() => {
+                    quote.timer_hidden = null;
+                    quote.hide(e);
+                    quote_mouse_down = false;
+                }, popup_hidden_time);
+            }
 
             function hideQuotePopup(e) {
                 let e_target_closest = false;

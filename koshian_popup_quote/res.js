@@ -1086,6 +1086,7 @@ function onMouseUp(e) {
     let font_elm = document.createElement("font");
     font_elm.classList.add("KOSHIAN_selected_font");
     font_elm.style.color = "red";
+    font_elm.style.backgroundColor = "#FFFFEE";
     let sel_range = sel.getRangeAt(0);
     if (sel.anchorNode.nodeName == "BLOCKQUOTE") {
         let sel_start = sel.anchorNode.childNodes[sel.anchorOffset];

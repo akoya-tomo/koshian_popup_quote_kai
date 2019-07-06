@@ -529,8 +529,24 @@ class Quote {
                     this.popup.style.bottom = `${parent_popup_rect.height - relative_top - 2}px`;
                 }
 
-                this.popup.style.left = `${relative_left + popup_indent}px`;
+                let popup_left = relative_left + popup_indent;
+                this.popup.style.left = "0px";
                 this.popup.style.display = "block";
+
+                // ポップアップが画面右端からはみ出る時は右端にそろえる
+                let popup_rect = this.popup.getBoundingClientRect();
+                let doc_width = document.documentElement.clientWidth;
+                let window_right = doc_width + document.documentElement.scrollLeft;
+                if (parent_popup_rect.left + popup_left + popup_rect.width > window_right) {
+                    if (doc_width < popup_rect.width) {
+                        this.popup.style.maxWidth = `${doc_width}px`;
+                        this.popup.style.minWidth = `${doc_width}px`;
+                    }
+                    this.popup.style.left = "";
+                    this.popup.style.right = `${parent_popup_rect.right - window_right}px`;
+                } else {
+                    this.popup.style.left = `${popup_left}px`;
+                }
             } else {
                 let rc = Quote.getPopupPosition(e.clientX, e.clientY, this.green_text);
 
@@ -540,13 +556,29 @@ class Quote {
                     this.popup.style.bottom = `${rc.bottom - 2}px`;
                 }
 
-                this.popup.style.left = `${rc.left + popup_indent}px`;
+                let popup_left = rc.left + popup_indent;
                 if (this.is_selected) {
                     // 文字列選択ポップアップはレス本文をポップアップleft位置基準にする
                     let rc_parent = Quote.getPopupPosition(e.clientX, e.clientY, this.green_text.parentElement);
-                    this.popup.style.left = `${rc_parent.left + popup_indent}px`;
+                    popup_left = rc_parent.left + popup_indent;
                 }
+                this.popup.style.left = "0px";
                 this.popup.style.display = "block";
+
+                // ポップアップが画面右端からはみ出る時は右端にそろえる
+                let popup_rect = this.popup.getBoundingClientRect();
+                let doc_width = document.documentElement.clientWidth;
+                let window_right = doc_width + document.documentElement.scrollLeft;
+                if (popup_left + popup_rect.width > window_right) {
+                    if (doc_width < popup_rect.width) {
+                        this.popup.style.maxWidth = `${doc_width}px`;
+                        this.popup.style.minWidth = `${doc_width}px`;
+                    }
+                    this.popup.style.left = "";
+                    this.popup.style.right = "0px";
+                } else {
+                    this.popup.style.left = `${popup_left}px`;
+                }
             }
 
             if (selected_elm) {

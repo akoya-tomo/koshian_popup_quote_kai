@@ -435,7 +435,7 @@ class Quote {
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
                 anchor.title = "このレスに移動";
-                anchor.innerText = ch.innerText;
+                anchor.innerText = `[${ch.innerText}]`;
                 anchor.addEventListener("click", () => {
                     for (let popup = this; popup; popup = popup.parent) {
                         popup.hide();
@@ -761,7 +761,7 @@ class Reply {
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
                 anchor.title = "このレスに移動";
-                anchor.innerText = ch.innerText;
+                anchor.innerText = `[${ch.innerText}]`;
                 anchor.addEventListener("click", () => {
                     this.mouseon = false;
                     this.hide();
@@ -1213,13 +1213,14 @@ function onMouseUp(e) {
         selected_elm = sel_elm.getElementsByClassName("KOSHIAN_selected_font")[0];
         let selected_index = 0;
         if (selected_elm) {
-            for (let elm = sel_elm; elm; elm = elm.parentElement) {
-                if (elm.className == "rtd" || elm.className == "KOSHIAN_response") {
-                    let selected_reply_no = elm.firstElementChild;
-                    if (selected_reply_no.className == "KOSHIAN_reply_no") {
-                        selected_index = Number(selected_reply_no.innerText);
+            let res_elm = sel_elm.closest(".rtd, .KOSHIAN_response");
+            if (res_elm) {
+                let selected_reply_no = res_elm.getElementsByClassName("KOSHIAN_reply_no")[0];
+                if (selected_reply_no) {
+                    let match = selected_reply_no.innerText.match(/\d+/);
+                    if (match) {
+                        selected_index = parseInt(match[0], 10);
                     }
-                    break;
                 }
             }
             if (selected_index) {

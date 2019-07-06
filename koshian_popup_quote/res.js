@@ -1043,9 +1043,9 @@ function onMouseDown(e) {
         return;
     }
 
-    // 選択文字列のfont要素をテキストノードに戻す
+    // 選択文字列のfont要素だけを削除（font要素の子要素は残す）
     let koshian_response = e.target.closest(".KOSHIAN_response");
-    replaceText(koshian_response, "KOSHIAN_selected_font");
+    unwrap(koshian_response, "KOSHIAN_selected_font");
     selected_elm = null;
 }
 
@@ -1058,9 +1058,9 @@ function onMouseUp(e) {
         return;
     }
 
-    // 選択文字列のfont要素をテキストノードに戻す
+    // 選択文字列のfont要素だけを削除（font要素の子要素は残す）
     let koshian_response = e.target.closest(".KOSHIAN_response");
-    replaceText(koshian_response, "KOSHIAN_selected_font");
+    unwrap(koshian_response, "KOSHIAN_selected_font");
     selected_elm = null;
 
     if (!search_selected_length) {
@@ -1117,8 +1117,41 @@ function onMouseUp(e) {
                 }
             }
         }
+        // レス本文内IP表示対応
+        let sel_start = sel_range.startContainer;
+        let sel_start_offset = sel_range.startOffset;
+        let has_left_bracket = false;
+        if (sel_start.nodeType == Node.TEXT_NODE) {
+            if (sel_start.length == sel_start_offset &&
+                sel_start.nextSibling == sel_start.nextElementSibling) {
+                // 選択始点がテキストノードの終点で次のノードが要素の場合
+                // 選択始点を要素の最初の子ノードの前に移動
+                sel_range.setStartBefore(sel_start.nextSibling.firstChild);
+            } else if (sel_start.nodeValue == "[" && sel_start.nextSibling.nodeName == "FONT") {
+                // 選択始点がIP表示の"["の場合、選択始点を"["の後に移動
+                sel_range.setStartBefore(sel_start.nextSibling.firstChild);
+                has_left_bracket = true;
+            }
+        }
+        let sel_end = sel_range.endContainer;
+        let sel_end_offset = sel_range.endOffset;
+        let has_right_bracket = false;
+        if (sel_end.nodeType == Node.TEXT_NODE &&
+            sel_end.nodeValue == "]" &&
+            sel_end.previousSibling.nodeName == "FONT") {
+            // 選択終点がIP表示の"]"の場合、選択終点を"]"の前に移動
+            sel_range.setEndAfter(sel_end.previousSibling.lastChild);
+            has_right_bracket = true;
+        }
         try {
             sel_range.surroundContents(font_elm);
+            // 移動した選択範囲を元に戻す
+            if (has_left_bracket) {
+                sel_range.setStart(sel_start, sel_start_offset);
+            }
+            if (has_right_bracket) {
+                sel_range.setEnd(sel_end, sel_end_offset);
+            }
         } catch(e) {
             console.error ("KOSHIAN_popup_quote/res.js - surround contents error: " + e);   // eslint-disable-line no-console
         }
@@ -1143,32 +1176,19 @@ function onMouseUp(e) {
 }
 
 /**
- * 指定したクラス名をテキストノードに置換
- * @param {Element} element 要素の子孫の指定クラス名をテキストノードに置換。
- *     要素がnullのときはdocument全体の指定クラス名をテキストノードに置換
- * @param {string} class_name テキストノードに置換されるクラス名
+ * 指定したクラス名の要素を子要素は残して削除
+ * @param {Element} element 削除する対象の要素
+ *     要素がnullのときはdocument全体が対象
+ * @param {string} class_name 子要素を残して削除する要素のクラス名
  */
-function replaceText(element, class_name) {
+function unwrap(element, class_name) {
     element = element ? element : document;
     let elements = element.getElementsByClassName(class_name);
-    for (let i = 0; i < elements.length; ++i) {
-        let text = getText(elements[i]);
-        if (text) {
-            let text_node = document.createTextNode(text);
-            let elm_parent = elements[i].parentNode;
-            elm_parent.replaceChild(text_node, elements[i]);
+    for (let i = 0, num = elements.length; i < num; ++i) {
+        while (elements[i].firstChild) {
+            elements[i].parentNode.insertBefore(elements[i].firstChild, elements[i]);
         }
-    }
-
-    /**
-     * 子孫要素のテキストを含まないテキストを取得
-     * @param {Element}} element テキストを取得する要素
-     */
-    function getText(element){
-        if (element.childNodes) {
-            return element.childNodes[0].wholeText;
-        }
-        return "";
+        elements[i].remove();
     }
 }
 

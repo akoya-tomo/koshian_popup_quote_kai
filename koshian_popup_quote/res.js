@@ -66,7 +66,7 @@ class SearchTarget {
                 continue;
             }
         }
-        
+
         return have_maybe ? SEARCH_RESULT_MAYBE : SEARCH_RESULT_NONE;
     }
 
@@ -101,7 +101,7 @@ class SearchTarget {
                     if (node.nodeType == Node.ELEMENT_NODE && node.nodeName == "BLOCKQUOTE") {
                         break;
                     }
-    
+
                     if(node.nodeType == Node.TEXT_NODE){
                         let matches = node.nodeValue.match(/(No\.[0-9]+)/);
                         if (matches) {
@@ -182,7 +182,7 @@ let search_targets = [];
  * @param {number} depth ポップアップの深さ
  * @param {Quote} parent 親ポップアップの引用クラス
  * @param {boolean} is_selected 文字列選択による引用か
- * @constructor  
+ * @constructor
  */
 class Quote {
     constructor(green_text, index, depth = 0, parent = null, is_selected = false) {
@@ -233,12 +233,14 @@ class Quote {
 
         this.green_text.addEventListener("mouseleave", (e) => {
             let related_target = e.relatedTarget;
-            if (related_target === null
-                || related_target.className == "KOSHIAN_QuoteMenuItem"
-                || related_target.className == "KOSHIAN_QuoteMenuText") {
+            if (related_target === null ||
+                related_target.className == "KOSHIAN_QuoteMenuItem" ||
+                related_target.className == "KOSHIAN_QuoteMenuText") {
+                // 移動先がコンテキストメニューか引用メニューならポップアップを閉じないでクリックを監視する
                 document.addEventListener("click", hideQuotePopup, false);
                 return;
             }
+
             quote.mouseon = false;
             if (quote.timer_shown) {
                 clearTimeout(quote.timer_shown);
@@ -264,6 +266,7 @@ class Quote {
                     && e.target.className != "KOSHIAN_QuoteMenuItem"
                     && e.target.className != "KOSHIAN_QuoteMenuText"
                     && !e_target_closest) {
+                    // クリックしたのがコンテキストメニューでも引用メニューでもポップアップ自身でもなければポップアップを閉じる
                     if (quote.mouseon) {
                         quote.mouseon = false;
                         quote.hide(e);
@@ -334,8 +337,7 @@ class Quote {
                 if(result == SEARCH_RESULT_PERFECT){
                     if((popup_perfect && popup_near) || is_reply){
                         return target.index;
-                    }else
-                    if(popup_perfect){
+                    }else if(popup_perfect){
                         origin.push(target.index);
                     }else{
                         origin_kouho.push(target.index);
@@ -530,7 +532,7 @@ class Quote {
         if (!this.initialized) {
             this.origin_index = this.findOriginIndex();
             this.initialized = true;
-            
+
             switch (this.origin_index) {
                 case -1:
                     break;
@@ -701,7 +703,7 @@ class Quote {
  * 返信レス番号ポップアップ制御クラス
  * @param {HTMLSpanElement} green_text 返信番号のSpan要素
  * @param {number} index 返信レスのレス番号（スレ内の通番）
- * @constructor  
+ * @constructor
  */
 class Reply {
     constructor (green_text, index) {
@@ -733,6 +735,7 @@ class Reply {
         this.green_text.addEventListener("mouseleave", (e) => {
             let related_target = e.relatedTarget;
             if (related_target === null || related_target.className == "KOSHIAN_QuoteMenuItem" || related_target.className == "KOSHIAN_QuoteMenuText") {
+                // 移動先がコンテキストメニューか引用メニューならポップアップを閉じないでクリックを監視する
                 document.addEventListener("click", hideReplyPopup, false);
                 return;
             }
@@ -756,6 +759,7 @@ class Reply {
                     e.target.className != "KOSHIAN_QuoteMenuItem" &&
                     e.target.className != "KOSHIAN_QuoteMenuText" &&
                     !e_target_closest) {
+                    // クリックしたのがコンテキストメニューでも引用メニューでもポップアップ自身でもなければポップアップを閉じる
                     if (reply.mouseon) {
                         reply.mouseon = false;
                         reply.hide();
@@ -1175,7 +1179,7 @@ function onMouseUp(e) {
             sel_elm = sel.anchorNode.parentNode;
         }
     }
-    
+
     try {
         sel_range.surroundContents(font_elm);
     } catch(e) {

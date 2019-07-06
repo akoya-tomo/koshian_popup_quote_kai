@@ -693,7 +693,7 @@ class Reply {
         this.index = index;
         this.popup = null;
         this.mouseon = false;
-        this.timer = false;
+        this.timer = null;
 
         let reply = this;
 
@@ -704,15 +704,13 @@ class Reply {
             reply.mouseon = true;
 
             if (!reply.timer) {
-                setTimeout(() => {
-                    reply.timer = false;
+                reply.timer = setTimeout(() => {
+                    reply.timer = null;
 
                     if (reply.mouseon) {
                         reply.show(e);
                     }
                 }, popup_time);
-
-                reply.timer = true;
             }
         });
 
@@ -722,7 +720,13 @@ class Reply {
                 document.addEventListener("click", hideReplyPopup, false);
                 return;
             }
+
             reply.mouseon = false;
+            if (reply.timer) {
+                clearTimeout(reply.timer);
+                reply.timer = null;
+            }
+
             reply.hide();
 
             function hideReplyPopup(e) {

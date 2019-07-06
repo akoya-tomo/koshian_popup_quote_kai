@@ -655,10 +655,9 @@ class Quote {
             }
 
             let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
-            for (let preview_switch of preview_switches) {
-                //preview_switch.className = "KOSHIAN_PopupPreview";
+            while (preview_switches.length) {
                 // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
-                preview_switch.remove();
+                preview_switches[0].remove();
             }
 
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));
@@ -897,10 +896,9 @@ class Reply {
             }
 
             let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
-            for (let preview_switch of preview_switches) {
-                //preview_switch.className = "KOSHIAN_PopupPreview";
+            while (preview_switches.length) {
                 // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
-                preview_switch.remove();
+                preview_switches[0].remove();
             }
 
             document.dispatchEvent(new CustomEvent("KOSHIAN_popupQuote"));

@@ -124,17 +124,21 @@ class SearchTarget {
             }
         }
 
+        // プレビューボタンを除いたスレ本文のテキストを取得
+        let blockquote_text = getInnerText(thre.getElementsByTagName("blockquote")[0], "KOSHIAN_PreviewSwitch");
         return new SearchTarget(
             0,
-            thre.getElementsByTagName("blockquote")[0].innerText.split(/\r\n|\r|\n/),
+            blockquote_text.split(/\r\n|\r|\n/),
             resno,
             filename);
     }
 
     static createByResponse(index, blockquote) {
+        // プレビューボタンを除いたレス本文のテキストを取得
+        let blockquote_text = getInnerText(blockquote, "KOSHIAN_PreviewSwitch");
         return new SearchTarget(
             index,
-            blockquote.innerText.split(/\r\n|\r|\n/),
+            blockquote_text.split(/\r\n|\r|\n/),
             search_resno ? SearchTarget.getResNo(blockquote) : "",
             search_file ? SearchTarget.getFileName(blockquote) : "");
     }
@@ -283,15 +287,13 @@ class Quote {
     }
 
     findOriginIndex(is_reply, target_index = -1) {
-        let search_text = this.green_text.innerText;
+        // プレビューボタンを除いた引用文のテキストを取得
+        let search_text = getInnerText(this.green_text, "KOSHIAN_PreviewSwitch");
         if (this.is_selected) {
             // 文字列選択ポップアップを前面にする
             this.zIndex = this.zIndex + 1;
         } else {
             search_text = search_text.slice(1).replace(/^[\s]+|[\s]+$/g, "");
-        }
-        if (this.green_text.getElementsByClassName("KOSHIAN_PreviewSwitch").length) {
-            search_text = search_text.replace(/\[見る\]|\[隠す\](\n|\r\n)?/g, "");
         }
         if (!search_text.length) {
             return -1;
@@ -1247,6 +1249,29 @@ function onMouseUp(e) {
             }
         }
     }
+}
+
+/**
+ * 要素のテキストを指定したクラス名のテキストを除外して取得
+ * @param {Element} element テキストを取得する要素
+ * @param {string} class_name テキスト取得を除外するクラス名
+ * @return {string} 取得したテキスト
+ */
+function getInnerText(element, class_name) {
+    let text = "";
+    if (!element) {
+        return text;
+    }
+    for (let node = element.firstChild; node; node = node.nextSibling) {
+        if (node.className == class_name) {
+            continue;
+        } else if (node.nodeName == "BR") {
+            text += "\n";
+        } else {
+            text += node.textContent;
+        }
+    }
+    return text;
 }
 
 /**

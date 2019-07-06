@@ -618,7 +618,7 @@ class Quote {
                 if (sel.toString().length) {
                     // 文字列選択終点をポップアップ要素の前に移動
                     let sel_range = sel.getRangeAt(0);
-                    let selected_koshian_res = selected_elm.firstElementChild;
+                    let selected_koshian_res = selected_elm.getElementsByClassName("KOSHIAN_response")[0];
                     if (selected_koshian_res) {
                         sel_range.setEndBefore(selected_koshian_res);
                     }

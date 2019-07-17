@@ -966,7 +966,7 @@ function createPopup(rtd, index) {
                 let quote = new Quote(font_elements[i], index, 0, null);
                 let origin_index = quote.findOriginIndex(true);
                 if (origin_index > -1 && origin_index != previous_index) {
-                    putReplyNo(origin_index, index);
+                    let result = putReplyNo(origin_index, index);
                     if (previous_index > -1) {
                         // 引用元に前回探索した引用の引用元が存在したときは前回設置した返信No.を削除する
                         let previous_quote_index = previous_quote.findOriginIndex(true, origin_index);
@@ -974,8 +974,13 @@ function createPopup(rtd, index) {
                             removeReplyNo(previous_index);
                         }
                     }
-                    previous_index = origin_index;
-                    previous_quote = quote;
+                    if (result) {
+                        previous_index = origin_index;
+                        previous_quote = quote;
+                    } else {
+                        previous_index = -1;
+                        previous_quote = null;
+                    }
                 }
             }
         }
@@ -988,27 +993,39 @@ function createPopup(rtd, index) {
     }
 }
 
+/**
+ * 返信レス番号設置
+ * @param {number} origin_index 元レス番号
+ * @param {number} index 返信レス番号
+ * @return {boolean} 返信レス番号を設置したか
+ */
 function putReplyNo(origin_index, index) {
     let reply_no = document.createElement("span");
     reply_no.className = "KOSHIAN_ReplyNo";
     reply_no.textContent = `>>${index}`;
     reply_no.style.color = REPLY_COLOR;
 
-    let response, reply_no_list, ng_button;
-    if (origin_index) {
+    let response, reply_no_list, num, ng_button;
+    if (origin_index > 0) {
         // レス
         response = g_response_list[origin_index - 1];
         reply_no_list = response.getElementsByClassName("KOSHIAN_ReplyNo");
-        ng_button = response.getElementsByClassName("KOSHIAN_HideButton")[0] || response.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+        num = reply_no_list.length;
+        if (!num) {
+            ng_button = response.getElementsByClassName("KOSHIAN_HideButton")[0] || response.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+        }
     } else {
         // スレ
         response = g_thre;
         reply_no_list = document.querySelectorAll(".thre > .KOSHIAN_ReplyNo");
-        ng_button = null;
+        num = reply_no_list.length;
     }
     let target;
-    if (reply_no_list.length) {
-        target = reply_no_list[reply_no_list.length - 1].nextSibling;
+    if (num) {
+        if (reply_no_list[num - 1].textContent == reply_no.textContent) {
+            return false;
+        }
+        target = reply_no_list[num - 1].nextSibling;
     } else if (ng_button) {
         target = ng_button.nextSibling;
     } else if (have_sod) {
@@ -1021,6 +1038,7 @@ function putReplyNo(origin_index, index) {
     response.insertBefore(reply_no, target);
     response.insertBefore(document.createTextNode(" "), reply_no);
     new Reply(reply_no, index);
+    return true;
 }
 
 function removeReplyNo(index) {

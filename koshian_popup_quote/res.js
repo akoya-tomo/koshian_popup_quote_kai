@@ -380,6 +380,10 @@ class Quote {
                     moveToResponse(ch);
                 }, false);
                 this.popup.appendChild(anchor);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_ReplyNo") {
+                let clone = ch.cloneNode(true);
+                clone.className = "KOSHIAN_PopupReply";
+                this.popup.appendChild(clone);
             } else {
                 this.popup.appendChild(ch.cloneNode(true));
                 if (ch.nodeName == "BLOCKQUOTE") {
@@ -462,6 +466,10 @@ class Quote {
                     moveToResponse(ch);
                 }, false);
                 this.popup.appendChild(anchor);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_ReplyNo") {
+                let clone = ch.cloneNode(true);
+                clone.className = "KOSHIAN_PopupReply";
+                this.popup.appendChild(clone);
             } else {
                 this.popup.appendChild(ch.cloneNode(true));
             }
@@ -788,6 +796,10 @@ class Reply {
                     moveToResponse(ch);
                 }, false);
                 this.popup.appendChild(anchor);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_ReplyNo") {
+                let clone = ch.cloneNode(true);
+                clone.className = "KOSHIAN_PopupReply";
+                this.popup.appendChild(clone);
             } else if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "INPUT" && ch.id) {
                 let clone = ch.cloneNode(true);
                 clone.id = ch.id + "_";

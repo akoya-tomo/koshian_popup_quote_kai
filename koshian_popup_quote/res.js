@@ -367,7 +367,7 @@ class Quote {
 
         // div要素を作りたいのでrd要素のクローンじゃだめ
         for (let ch = g_thre.firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -380,6 +380,10 @@ class Quote {
                     moveToResponse(ch);
                 }, false);
                 this.popup.appendChild(anchor);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_ReplyNo") {
+                let clone = ch.cloneNode(true);
+                clone.className = "KOSHIAN_PopupReply";
+                this.popup.appendChild(clone);
             } else {
                 this.popup.appendChild(ch.cloneNode(true));
                 if (ch.nodeName == "BLOCKQUOTE") {
@@ -449,7 +453,7 @@ class Quote {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.origin_index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -462,6 +466,10 @@ class Quote {
                     moveToResponse(ch);
                 }, false);
                 this.popup.appendChild(anchor);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_ReplyNo") {
+                let clone = ch.cloneNode(true);
+                clone.className = "KOSHIAN_PopupReply";
+                this.popup.appendChild(clone);
             } else {
                 this.popup.appendChild(ch.cloneNode(true));
             }
@@ -658,7 +666,7 @@ class Quote {
 
             let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
             while (preview_switches.length) {
-                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                // KOSHIAN 自動リンク生成の[見る][隠す]ボタンを削除
                 preview_switches[0].remove();
             }
 
@@ -776,7 +784,7 @@ class Reply {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -788,7 +796,11 @@ class Reply {
                     moveToResponse(ch);
                 }, false);
                 this.popup.appendChild(anchor);
-            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "INPUT" && ch.id) {
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_ReplyNo") {
+                let clone = ch.cloneNode(true);
+                clone.className = "KOSHIAN_PopupReply";
+                this.popup.appendChild(clone);
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.id) {
                 let clone = ch.cloneNode(true);
                 clone.id = ch.id + "_";
                 this.popup.appendChild(clone);
@@ -901,7 +913,7 @@ class Reply {
 
             let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
             while (preview_switches.length) {
-                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                // KOSHIAN 自動リンク生成の[見る][隠す]ボタンを削除
                 preview_switches[0].remove();
             }
 
@@ -954,7 +966,7 @@ function createPopup(rtd, index) {
                 let quote = new Quote(font_elements[i], index, 0, null);
                 let origin_index = quote.findOriginIndex(true);
                 if (origin_index > -1 && origin_index != previous_index) {
-                    putReplyNo(origin_index, index);
+                    let result = putReplyNo(origin_index, index);
                     if (previous_index > -1) {
                         // 引用元に前回探索した引用の引用元が存在したときは前回設置した返信No.を削除する
                         let previous_quote_index = previous_quote.findOriginIndex(true, origin_index);
@@ -962,8 +974,13 @@ function createPopup(rtd, index) {
                             removeReplyNo(previous_index);
                         }
                     }
-                    previous_index = origin_index;
-                    previous_quote = quote;
+                    if (result) {
+                        previous_index = origin_index;
+                        previous_quote = quote;
+                    } else {
+                        previous_index = -1;
+                        previous_quote = null;
+                    }
                 }
             }
         }
@@ -976,27 +993,39 @@ function createPopup(rtd, index) {
     }
 }
 
+/**
+ * 返信レス番号設置
+ * @param {number} origin_index 元レス番号
+ * @param {number} index 返信レス番号
+ * @return {boolean} 返信レス番号を設置したか
+ */
 function putReplyNo(origin_index, index) {
     let reply_no = document.createElement("span");
     reply_no.className = "KOSHIAN_ReplyNo";
     reply_no.textContent = `>>${index}`;
     reply_no.style.color = REPLY_COLOR;
 
-    let response, reply_no_list, ng_button;
-    if (origin_index) {
+    let response, reply_no_list, num, ng_button;
+    if (origin_index > 0) {
         // レス
         response = g_response_list[origin_index - 1];
         reply_no_list = response.getElementsByClassName("KOSHIAN_ReplyNo");
-        ng_button = response.getElementsByClassName("KOSHIAN_HideButton")[0] || response.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+        num = reply_no_list.length;
+        if (!num) {
+            ng_button = response.getElementsByClassName("KOSHIAN_HideButton")[0] || response.getElementsByClassName("KOSHIAN_NGSwitch")[0];
+        }
     } else {
         // スレ
         response = g_thre;
         reply_no_list = document.querySelectorAll(".thre > .KOSHIAN_ReplyNo");
-        ng_button = null;
+        num = reply_no_list.length;
     }
     let target;
-    if (reply_no_list.length) {
-        target = reply_no_list[reply_no_list.length - 1].nextSibling;
+    if (num) {
+        if (reply_no_list[num - 1].textContent == reply_no.textContent) {
+            return false;
+        }
+        target = reply_no_list[num - 1].nextSibling;
     } else if (ng_button) {
         target = ng_button.nextSibling;
     } else if (have_sod) {
@@ -1009,8 +1038,13 @@ function putReplyNo(origin_index, index) {
     response.insertBefore(reply_no, target);
     response.insertBefore(document.createTextNode(" "), reply_no);
     new Reply(reply_no, index);
+    return true;
 }
 
+/**
+ * 返信レス番号削除
+ * @param {number} index 返信レス番号を削除するレスのレス番号
+ */
 function removeReplyNo(index) {
     let response, reply_no_list;
     if (index) {

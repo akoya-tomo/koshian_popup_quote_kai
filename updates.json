@@ -2,7 +2,11 @@
   "addons": {
     "{54BE1208-F6AC-11E7-BCFC-0C64237CB63F}": {
       "updates": [
-        { "version": "1.10.0", "update_link": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.10.0/koshian_popup_quote_kai-1.10.0-fx.xpi" }
+        { 
+          "version": "1.10.0",
+          "update_link": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.10.0/koshian_popup_quote_kai-1.10.0-fx.xpi",
+          "update_info_url": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.10.0/update_info.html"
+        }
       ]
     }
   }

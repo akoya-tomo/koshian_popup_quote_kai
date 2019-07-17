@@ -367,7 +367,7 @@ class Quote {
 
         // div要素を作りたいのでrd要素のクローンじゃだめ
         for (let ch = g_thre.firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -453,7 +453,7 @@ class Quote {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.origin_index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -666,7 +666,7 @@ class Quote {
 
             let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
             while (preview_switches.length) {
-                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                // KOSHIAN 自動リンク生成の[見る][隠す]ボタンを削除
                 preview_switches[0].remove();
             }
 
@@ -784,7 +784,7 @@ class Reply {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "SPAN" && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -800,7 +800,7 @@ class Reply {
                 let clone = ch.cloneNode(true);
                 clone.className = "KOSHIAN_PopupReply";
                 this.popup.appendChild(clone);
-            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.nodeName == "INPUT" && ch.id) {
+            } else if (ch.nodeType == Node.ELEMENT_NODE && ch.id) {
                 let clone = ch.cloneNode(true);
                 clone.id = ch.id + "_";
                 this.popup.appendChild(clone);
@@ -913,7 +913,7 @@ class Reply {
 
             let preview_switches = this.popup.getElementsByClassName("KOSHIAN_PreviewSwitch");
             while (preview_switches.length) {
-                // KOSHIAN 自動リンク生成の[隠す]ボタンを削除
+                // KOSHIAN 自動リンク生成の[見る][隠す]ボタンを削除
                 preview_switches[0].remove();
             }
 
@@ -1041,6 +1041,10 @@ function putReplyNo(origin_index, index) {
     return true;
 }
 
+/**
+ * 返信レス番号削除
+ * @param {number} index 返信レス番号を削除するレスのレス番号
+ */
 function removeReplyNo(index) {
     let response, reply_no_list;
     if (index) {

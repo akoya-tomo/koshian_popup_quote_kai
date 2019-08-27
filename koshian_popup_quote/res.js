@@ -84,7 +84,7 @@ class SearchTarget {
         if (name.match(/^\d+$/) && this.filename.match(/^\d+/)) {
             return this.filename.match(/^\d+/)[0] == name;
         } else {
-            return this.filename == name;
+            return this.filename == name.replace(/-$/, ""); // 検索文字列の末尾の-は無視する
         }
     }
 

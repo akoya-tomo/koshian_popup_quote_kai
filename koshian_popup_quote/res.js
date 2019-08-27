@@ -1,6 +1,7 @@
 const DEFAULT_SEARCH_RESNO = true;
 const DEFAULT_SEARCH_FILE = true;
 const DEFAULT_POPUP_TIME = 100;
+const DEFAULT_POPUP_HIDDEN_TIME = 300;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = true;
 const DEFAULT_POPUP_NEAR = false;
@@ -10,7 +11,6 @@ const DEFAULT_SEARCH_REPLY = true;
 const DEFAULT_POPUP_FONT_SIZE = 0;
 const DEFAULT_POPUP_IMG_SCALE = 100;
 const DEFAULT_USE_FUTABA_LIGHTBOX = true;
-const DEFAULT_POPUP_HIDDEN_TIME = 300;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
@@ -18,6 +18,7 @@ const REPLY_COLOR = "#789922";
 let search_resno = DEFAULT_SEARCH_RESNO;
 let search_file = DEFAULT_SEARCH_FILE;
 let popup_time = DEFAULT_POPUP_TIME;
+let popup_hidden_time = DEFAULT_POPUP_HIDDEN_TIME;
 let popup_indent = DEFAULT_POPUP_INDENT;
 let popup_todown = DEFAULT_POPUP_TODOWN;
 let popup_near = DEFAULT_POPUP_NEAR;
@@ -27,7 +28,6 @@ let search_reply = DEFAULT_SEARCH_REPLY;
 let popup_font_size = DEFAULT_POPUP_FONT_SIZE;
 let popup_img_scale = DEFAULT_POPUP_IMG_SCALE;
 let use_futaba_lightbox = DEFAULT_USE_FUTABA_LIGHTBOX;
-let popup_hidden_time = DEFAULT_POPUP_HIDDEN_TIME;
 let g_thre = null;
 let g_response_list = [];
 let g_last_response_num = 0;
@@ -84,7 +84,7 @@ class SearchTarget {
         if (name.match(/^\d+$/) && this.filename.match(/^\d+/)) {
             return this.filename.match(/^\d+/)[0] == name;
         } else {
-            return this.filename == name;
+            return this.filename == name.replace(/-$/, ""); // 検索文字列の末尾の-は無視する
         }
     }
 
@@ -1373,6 +1373,7 @@ function onLoadSetting(result) {
     search_resno = safeGetValue(result.search_resno, DEFAULT_SEARCH_RESNO);
     search_file = safeGetValue(result.search_file, DEFAULT_SEARCH_FILE);
     popup_time = Number(safeGetValue(result.popup_time, DEFAULT_POPUP_TIME));
+    popup_hidden_time = Number(safeGetValue(result.popup_hidden_time, DEFAULT_POPUP_HIDDEN_TIME));
     popup_indent = Number(safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
     popup_near = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);
@@ -1393,6 +1394,7 @@ function onSettingChanged(changes, areaName) {
     search_resno = safeGetValue(changes.search_resno.newValue, DEFAULT_SEARCH_RESNO);
     search_file = safeGetValue(changes.search_file.newValue, DEFAULT_SEARCH_FILE);
     popup_time = Number(safeGetValue(changes.popup_time.newValue, DEFAULT_POPUP_TIME));
+    popup_hidden_time = Number(safeGetValue(changes.popup_hidden_time.newValue, DEFAULT_POPUP_HIDDEN_TIME));
     popup_indent = Number(safeGetValue(changes.popup_indent.newValue, DEFAULT_POPUP_INDENT));
     popup_todown = safeGetValue(changes.popup_todown.newValue, DEFAULT_POPUP_TODOWN);
     popup_near = safeGetValue(changes.popup_near.newValue, DEFAULT_POPUP_NEAR);

@@ -1,6 +1,7 @@
 const DEFAULT_SEARCH_RESNO = true;
 const DEFAULT_SEARCH_FILE = true;
 const DEFAULT_POPUP_TIME = 100;
+const DEFAULT_POPUP_HIDDEN_TIME = 300;
 const DEFAULT_POPUP_INDENT = 0;
 const DEFAULT_POPUP_TODOWN = true;
 const DEFAULT_POPUP_NEAR = false;
@@ -26,6 +27,7 @@ function saveOptions(e) {
     search_resno: document.querySelector("#search_resno").checked,
     search_file: document.querySelector("#search_file").checked,
     popup_time: document.querySelector("#popup_time").value,
+    popup_hidden_time: document.querySelector("#popup_hidden_time").value,
     popup_indent: document.querySelector("#popup_indent").value,
     popup_todown: document.querySelector("#popup_todown").checked,
     popup_near: document.querySelector("#popup_near").checked,
@@ -41,6 +43,7 @@ function setCurrentChoice(result) {
   document.querySelector("#search_resno").checked = safeGetValue(result.search_resno, DEFAULT_SEARCH_RESNO);
   document.querySelector("#search_file").checked = safeGetValue(result.search_file, DEFAULT_SEARCH_FILE);
   document.querySelector("#popup_time").value = safeGetValue(result.popup_time, DEFAULT_POPUP_TIME);
+  document.querySelector("#popup_hidden_time").value = safeGetValue(result.popup_hidden_time, DEFAULT_POPUP_HIDDEN_TIME);
   document.querySelector("#popup_indent").value = safeGetValue(result.popup_indent, DEFAULT_POPUP_INDENT);
   document.querySelector("#popup_todown").checked = safeGetValue(result.popup_todown, DEFAULT_POPUP_TODOWN);
   document.querySelector("#popup_near").checked = safeGetValue(result.popup_near, DEFAULT_POPUP_NEAR);

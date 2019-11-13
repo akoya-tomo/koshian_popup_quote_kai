@@ -93,7 +93,7 @@ class SearchTarget {
         let filename = "";
 
         if(search_resno){
-            let number_button = document.querySelector(".thre > .KOSHIAN_NumberButton");
+            let number_button = document.querySelector(".thre > .cno") || document.querySelector(".thre > .KOSHIAN_NumberButton");
             if (number_button) {
                 resno = number_button.textContent;
             } else {
@@ -144,7 +144,7 @@ class SearchTarget {
     }
 
     static getResNo(blockquote) {
-        let number_button = blockquote.parentNode.getElementsByClassName("KOSHIAN_NumberButton")[0];
+        let number_button = blockquote.parentNode.getElementsByClassName("cno")[0] || blockquote.parentNode.getElementsByClassName("KOSHIAN_NumberButton")[0];
         if (number_button) {
             return number_button.textContent;
         }

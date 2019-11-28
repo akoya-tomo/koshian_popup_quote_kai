@@ -14,7 +14,6 @@ const DEFAULT_USE_FUTABA_LIGHTBOX = true;
 const TEXT_COLOR = "#800000";
 const BG_COLOR = "#F0E0D6";
 const QUOTE_COLOR = "#789922";
-const REPLY_COLOR = "#789922";
 let search_resno = DEFAULT_SEARCH_RESNO;
 let search_file = DEFAULT_SEARCH_FILE;
 let popup_time = DEFAULT_POPUP_TIME;
@@ -1003,7 +1002,6 @@ function putReplyNo(origin_index, index) {
     let reply_no = document.createElement("span");
     reply_no.className = "KOSHIAN_ReplyNo";
     reply_no.textContent = `>>${index}`;
-    reply_no.style.color = REPLY_COLOR;
 
     let response, reply_no_list, num, ng_button;
     if (origin_index > 0) {
@@ -1036,7 +1034,6 @@ function putReplyNo(origin_index, index) {
         target = response.getElementsByTagName("blockquote")[0];
     }
     response.insertBefore(reply_no, target);
-    response.insertBefore(document.createTextNode(" "), reply_no);
     new Reply(reply_no, index);
     return true;
 }
@@ -1058,7 +1055,6 @@ function removeReplyNo(index) {
     }
     if (reply_no_list.length) {
         let target = reply_no_list[reply_no_list.length - 1];
-        response.removeChild(target.previousSibling);   // 空白テキスト
         response.removeChild(target);
     }
 }

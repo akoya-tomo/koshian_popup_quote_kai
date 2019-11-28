@@ -18,7 +18,8 @@
     "content_scripts":[
         {
             "matches":["*://*.2chan.net/*/res/*","*://kako.futakuro.com/futa/*_b/*", "*://tsumanne.net/*/data/*", "*://*.ftbucket.info/*/cont/*"],
-            "js":["res.js"]
+            "js":["res.js"],
+            "css":["style.css"]
         }
     ],
     

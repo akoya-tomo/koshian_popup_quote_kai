@@ -3,9 +3,9 @@
     "{54BE1208-F6AC-11E7-BCFC-0C64237CB63F}": {
       "updates": [
         { 
-          "version": "1.11.1",
-          "update_link": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.11.1/koshian_popup_quote_kai-1.11.1-fx.xpi",
-          "update_info_url": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.11.1/update_info.html"
+          "version": "1.11.2",
+          "update_link": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.11.2/koshian_popup_quote_kai-1.11.2-fx.xpi",
+          "update_info_url": "https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.11.2/update_info.html"
         }
       ]
     }

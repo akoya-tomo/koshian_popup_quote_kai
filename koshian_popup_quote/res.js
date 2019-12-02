@@ -36,6 +36,7 @@ let selected_parent_list = [null];
 let quote_mouse_down = false;
 let have_sod = false;
 let have_del = false;
+let have_rsc = false;
 
 const SEARCH_RESULT_PERFECT = 0;
 const SEARCH_RESULT_MAYBE = 1;
@@ -366,7 +367,8 @@ class Quote {
 
         // div要素を作りたいのでrd要素のクローンじゃだめ
         for (let ch = g_thre.firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
+            if ((ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") ||
+                (ch.nodeName == "SPAN" && /^delcheck\d+$/.test(ch.id))) {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -452,7 +454,8 @@ class Quote {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.origin_index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && 
+                (ch.className == "KOSHIAN_reply_no" || ch.className == "rsc")) {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -783,7 +786,8 @@ class Reply {
         // div要素を作りたいのでrd要素のクローンじゃだめ
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.index - 1].firstChild; ch != null; ch = ch.nextSibling) {
-            if (ch.nodeType == Node.ELEMENT_NODE && ch.className == "KOSHIAN_reply_no") {
+            if (ch.nodeType == Node.ELEMENT_NODE && 
+                (ch.className == "KOSHIAN_reply_no" || ch.className == "rsc")) {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -1066,8 +1070,10 @@ function process(beg, end){
     }
 
     // put index
-    for(let i = beg; i < end; ++i){
-        putIndex(g_response_list[i], i + 1);
+    if (!have_rsc) {
+        for(let i = beg; i < end; ++i){
+            putIndex(g_response_list[i], i + 1);
+        }
     }
 
     // create popup
@@ -1095,10 +1101,13 @@ function main() {
     g_response_list = g_thre.getElementsByClassName("rtd");
     have_sod = document.getElementsByClassName("sod").length > 0;
     have_del = document.getElementsByClassName("del").length > 0;
+    have_rsc = document.querySelector(".thre > span[id^='delcheck']") ? true : false;
 
     // add search targets by thre
     search_targets.push(SearchTarget.createByThre(g_thre));
-    putIndex(g_thre, 0);
+    if (!have_rsc) {
+        putIndex(g_thre, 0);
+    }
 
     process(0, g_response_list.length);
     g_last_response_num = g_response_list.length;

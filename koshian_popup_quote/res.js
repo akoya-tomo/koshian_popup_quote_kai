@@ -1354,7 +1354,7 @@ function isInsideBlockquote(element){
  */
 function moveToResponse(replyNo_elm){
     let target = replyNo_elm.parentNode;
-    if (replyNo_elm.id == "KOSHIAN_reply_no0") {
+    if (replyNo_elm.id == "KOSHIAN_reply_no0" || replyNo_elm.textContent == "") {
         target = target.getElementsByTagName("blockquote")[0];
     }
     if (target) {

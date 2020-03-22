@@ -35,7 +35,7 @@
 
 ## インストール
 **GitHub**  
-[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.11.2/koshian_popup_quote_kai-1.11.2-fx.xpi)  
+[![インストールボタン](images/install_button.png "クリックでアドオンをインストール")](https://github.com/akoya-tomo/koshian_popup_quote_kai/releases/download/v1.11.3/koshian_popup_quote_kai-1.11.3-fx.xpi)  
 
 ※v1.9.1からアドオンのアクセス許可に「」ッチー(`tsumanne.net`)・FTBucket(`ftbucket.info`)が追加になります。（アドオンを動作させるため）  
 ※v1.2.2からアドオンのアクセス許可にふたポの過去ログ\(`kako.futakuro.com`\)が追加になります。（アドオンを動作させるため） 
@@ -77,6 +77,9 @@
     選択文字列のポップアップが前面に表示されます。  
 
 ## 更新履歴  
+* v1.11.3 2020-03-22
+  - v1.11.2でポップアップからレス番号クリックでスレ先頭へ正常にジャンプしない不具合を修正
+  - v1.11.2で選択文字列ポップアップが動作しない不具合を修正
 * v1.11.2 2019-12-02
   - ふたばのレスNo.と表示が重複する不具合を修正
 * v1.11.1 2019-11-28

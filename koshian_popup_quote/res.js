@@ -1282,7 +1282,7 @@ function onMouseUp(e) {
         if (selected_elm) {
             let res_elm = sel_elm.closest(".rtd, .KOSHIAN_response");
             if (res_elm) {
-                let selected_reply_no = res_elm.getElementsByClassName("KOSHIAN_reply_no")[0];
+                let selected_reply_no = res_elm.getElementsByClassName("rsc")[0] || res_elm.getElementsByClassName("KOSHIAN_reply_no")[0];
                 if (selected_reply_no) {
                     let match = selected_reply_no.innerText.match(/\d+/);
                     if (match) {

@@ -455,7 +455,7 @@ class Quote {
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.origin_index - 1].firstChild; ch != null; ch = ch.nextSibling) {
             if (ch.nodeType == Node.ELEMENT_NODE && 
-                (ch.className == "KOSHIAN_reply_no" || ch.className == "rsc")) {
+                (ch.className == "KOSHIAN_reply_no" || ch.classList.contains("rsc"))) {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
@@ -787,7 +787,7 @@ class Reply {
         // g_response_listは最初のスレを含まないので-1
         for (let ch = g_response_list[this.index - 1].firstChild; ch != null; ch = ch.nextSibling) {
             if (ch.nodeType == Node.ELEMENT_NODE && 
-                (ch.className == "KOSHIAN_reply_no" || ch.className == "rsc")) {
+                (ch.className == "KOSHIAN_reply_no" || ch.classList.contains("rsc"))) {
                 let anchor = document.createElement("a");
                 anchor.href = "javascript:void(0);";
                 anchor.className = "KOSHIAN_reply_no";
